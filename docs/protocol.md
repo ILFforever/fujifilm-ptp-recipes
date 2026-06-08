@@ -144,6 +144,7 @@ Response codes:
 | `0x2001` | 8193 | OK |
 | `0x2002` | 8194 | General Error |
 | `0x2003` | 8195 | Session Not Open |
+| `0x201C` | 8220 | observed non-OK response when writing Dynamic Range while DR Priority is active |
 | `0x201E` | 8222 | Session Already Open |
 
 ## 6. Fuji Recipe Properties
@@ -153,6 +154,8 @@ Response codes:
 | `0xD18C` | 53644 | Slot selector |
 | `0xD18D` | 53645 | Preset name |
 | `0xD18E..0xD1A5` | 53646..53669 | Per-slot recipe property block |
+| `0xD190` | 53648 | Dynamic Range |
+| `0xD191` | 53649 | Dynamic Range Priority |
 
 The slot selector is the central control point. Write `0xD18C` first, then read or write the name
 and recipe properties for that selected slot.
@@ -245,6 +248,7 @@ Recommended write rules:
 - Write Film Simulation before dependent properties.
 - Skip color-only properties for monochrome simulations.
 - Skip Color Temperature unless White Balance is Color Temperature.
+- Skip Dynamic Range `0xD190` when Dynamic Range Priority `0xD191` is Weak, Strong, or Auto.
 - Use `int16LE` for signed properties.
 - Use `uint16LE` for unsigned properties.
 - Write the preset name last.
@@ -273,7 +277,40 @@ Only write `0xD19C` Color Temperature when White Balance is `0x8007`.
 If the white balance mode is Auto, Daylight, Shade, Incandescent, Fluorescent, etc., suppress the
 Color Temperature write even if a stale value exists locally.
 
-## 12. Timing
+## 12. Dynamic Range Priority
+
+Dynamic Range Priority is exposed in the slot property block at `0xD191` as `uint16LE`.
+
+| Wire | Meaning |
+|---:|---|
+| 0 | Off |
+| 1 | Weak |
+| 2 | Strong |
+| 32768 (`0x8000`) | Auto |
+
+When Dynamic Range Priority is not Off, the camera controls Dynamic Range and rejects direct writes
+to `0xD190`.
+
+Confirmed X-H2 firmware 5.20 bench sequence:
+
+```text
+SET_DEVICE_PROP_VALUE 0xD191 = 1 / Weak
+<- RESPONSE_OK 0x2001
+GET_DEVICE_PROP_VALUE 0xD191
+<- 01 00 / Weak
+
+SET_DEVICE_PROP_VALUE 0xD190 = 400 / DR400%
+<- response 0x201C
+GET_DEVICE_PROP_VALUE 0xD190
+<- previous DR value unchanged
+GET_DEVICE_PROP_VALUE 0xD191
+<- 01 00 / Weak still active
+```
+
+For recipe writers: write `0xD191` first. If it is Weak, Strong, or Auto, omit `0xD190` from the
+write set. Only write manual DR Auto/100/200/400 when `0xD191` is Off.
+
+## 13. Timing
 
 Known results:
 
@@ -289,7 +326,7 @@ Caution:
 - Slot switching requires a short settle delay before reading values. Start with 100 ms for
   untested bodies. 50 ms has been confirmed safe on X-H2 firmware 5.20.
 
-## 13. PTP String Encoding
+## 14. PTP String Encoding
 
 PTP strings are length-prefixed UTF-16LE with a null terminator.
 
@@ -314,7 +351,7 @@ Explanation:
 
 Preset names have stricter safety rules than generic PTP strings. See [name-rules.md](name-rules.md).
 
-## 14. Complete Example Trace
+## 15. Complete Example Trace
 
 Read C3:
 
@@ -378,19 +415,15 @@ Write C3 name and two properties:
 <- RESPONSE_OK tx=8
 ```
 
-## 15. Known Failures / Open Areas
+## 16. Known Failures / Open Areas
 
 - X-Pro3 does not work with the current protocol path so far. Diagnosis needed.
 - X-Trans III bodies are untested.
 - Some unknown properties in `0xD18E..0xD1A5` remain unmapped.
 - Some bodies may use fewer or different custom slots.
 - Camera UI character entry and PTP name writes may not accept the same character set.
-- **Dynamic Range Priority** (`Off / Weak / Strong / Auto`) does not appear in the
-  `0xD18E..0xD1A5` recipe property block and is not observed to be exposed over USB. This setting
-  overrides the manual DR 100/200/400 when active but appears to be write-only from the camera menu.
-  Treat as unsupported for USB recipe management.
 
-## 16. Session Teardown
+## 17. Session Teardown
 
 Recommended disconnect sequence:
 

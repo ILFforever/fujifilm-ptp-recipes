@@ -13,8 +13,9 @@ until tested.
 - Slot selection through Fuji vendor property `0xD18C`.
 - Preset-name reads/writes through `0xD18D`.
 - Recipe property reads/writes in `0xD18E..0xD1A5`.
-- Known property encodings for film simulation, white balance, dynamic range, tone, color,
-  sharpness, clarity, high ISO NR, grain, color chrome, smooth skin, and WB shift.
+- Known property encodings for film simulation, white balance, dynamic range, dynamic range
+  priority, tone, color, sharpness, clarity, high ISO NR, grain, color chrome, smooth skin, and
+  WB shift.
 - Preset-name limits and safe character rules.
 - Tested camera bodies and known failures.
 
@@ -35,7 +36,7 @@ until tested.
 
 | Body | Firmware | Read slots | Write props | Write names | Notes |
 |---|---:|---|---|---|---|
-| X-H2 | 5.20 | OK | OK | OK | 0 ms inter-property delay worked in app testing. Preset names appear capped at 25 characters. |
+| X-H2 | 5.20 | OK | OK | OK | 0 ms inter-property delay worked in app testing. DR Priority `0xD191` confirmed; active priority rejects DR `0xD190` writes with `0x201C`. Preset names appear capped at 25 characters. |
 | X-T5 | 4.20 | OK | OK | OK | Confirmed working in app testing. |
 | X-Pro3 | 2.00 | Fails so far | Fails so far | Fails so far | Does not work with the current protocol path so far. Needs more diagnosis. |
 

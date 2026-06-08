@@ -13,6 +13,7 @@ Known mapped properties:
 | Hex | Dec | Name | Encoding | Wire default | Display meaning |
 |---|---:|---|---|---|---|
 | `0xD190` | 53648 | Dynamic Range | `uint16LE` | 100 | DR Auto/100/200/400 |
+| `0xD191` | 53649 | Dynamic Range Priority | `uint16LE` | 0 | Off/Weak/Strong/Auto |
 | `0xD192` | 53650 | Film Simulation | `uint16LE` | 1 (Provia) | Film simulation enum |
 | `0xD193` | 53651 | Mono WC | `int16LE` | 0 | Warm/Cool monochrome color, dial×10 |
 | `0xD194` | 53652 | Mono MG | `int16LE` | 0 | Magenta/Green monochrome color, dial×10 |
@@ -34,7 +35,7 @@ Known mapped properties:
 Unmapped but in the observed read range:
 
 ```text
-0xD18E, 0xD18F, 0xD191, 0xD1A3, 0xD1A4, 0xD1A5
+0xD18E, 0xD18F, 0xD1A3, 0xD1A4, 0xD1A5
 ```
 
 Log these values when developing. They may be unused, body-specific, or related to settings not
@@ -75,6 +76,28 @@ When writing a monochrome-like simulation, skip color-only settings.
 | 100 | DR100% |
 | 200 | DR200% |
 | 400 | DR400% |
+
+When Dynamic Range Priority (`0xD191`) is Weak, Strong, or Auto, do not write `0xD190`. The
+camera rejects direct Dynamic Range writes while priority is active.
+
+## Dynamic Range Priority (`0xD191`)
+
+| Wire | Payload | Meaning |
+|---:|---|---|
+| 0 | `00 00` | Off |
+| 1 | `01 00` | Weak |
+| 2 | `02 00` | Strong |
+| 32768 | `00 80` | Auto |
+
+Dynamic Range Priority overrides manual Dynamic Range. Confirmed behavior on X-H2 firmware 5.20:
+
+- Writing `0xD191` returns `0x2001` and reads back the selected priority value.
+- Writing `0xD190` while `0xD191` is Weak/Strong/Auto returns `0x201C`.
+- Reading `0xD190` after the rejected write returns the previous DR value.
+- Reading `0xD191` after the rejected DR write shows priority remains active.
+
+Writer rule: if `0xD191 != 0`, omit `0xD190` from the write set. If priority is Off, `0xD190`
+may be written normally as `0`, `100`, `200`, or `400`.
 
 ## White Balance (`0xD199`)
 
@@ -191,10 +214,12 @@ Do not write the display dial directly. For example, dial `0` should write wire 
 1. Slot selector `0xD18C`
 2. `GET_DEVICE_INFO`
 3. Film Simulation `0xD192`
-4. Dynamic Range and effect properties
-5. White Balance mode and dependent WB properties
-6. Tone/color/detail properties
-7. Preset name `0xD18D`
+4. Dynamic Range Priority `0xD191`
+5. Dynamic Range `0xD190`, only when priority is Off
+6. Effect properties
+7. White Balance mode and dependent WB properties
+8. Tone/color/detail properties
+9. Preset name `0xD18D`
 
 The exact order after Film Simulation is less critical, but writing Film Simulation first avoids
 range/dependency problems.

@@ -26,6 +26,7 @@ SET_DEVICE_PROP_VALUE = 0x1016
 RESPONSE_OK = 0x2001
 RESPONSE_GENERAL_ERROR = 0x2002
 RESPONSE_SESSION_NOT_OPEN = 0x2003
+RESPONSE_DR_REJECTED_UNDER_PRIORITY = 0x201C
 RESPONSE_SESSION_ALREADY_OPEN = 0x201E
 
 FUJI_SLOT_SELECTOR = 0xD18C
@@ -35,6 +36,7 @@ PRESET_BLOCK_END = 0xD1A5
 
 PROPERTY = {
     "Dynamic Range": 0xD190,
+    "Dynamic Range Priority": 0xD191,
     "Film Simulation": 0xD192,
     "Mono WC": 0xD193,
     "Mono MG": 0xD194,
@@ -171,6 +173,14 @@ def off_weak_strong_to_wire(label: str) -> int:
     return {"Weak": 2, "Strong": 3}.get(label, 1)
 
 
+def dynamic_range_priority_to_wire(label: str) -> int:
+    return {
+        "Weak": 1,
+        "Strong": 2,
+        "Auto": 32768,
+    }.get(label, 0)
+
+
 def property_payload(prop_code: int, value: int) -> bytes:
     return i16(value) if prop_code in SIGNED_PROPERTIES else u16(value)
 
@@ -206,6 +216,7 @@ def write_slot_sequence(slot_number: int, raw_props: dict[int, int], name: str):
     send GET_DEVICE_INFO
 
     if Film Simulation is present, write it first.
+    if Dynamic Range Priority is not Off, skip Dynamic Range 0xD190.
     write remaining props, skipping invalid dependent props.
     write FUJI_PRESET_NAME with ptp_string(sanitize_preset_name(name))
 
