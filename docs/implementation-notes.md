@@ -105,6 +105,23 @@ Correct:
 Grain Off -> write 1
 ```
 
+### Writing Dynamic Range while Dynamic Range Priority is active
+
+Wrong:
+
+```text
+D Range Priority Weak -> write 0xD191 = 1, then write Dynamic Range 0xD190 = 400
+```
+
+Correct:
+
+```text
+D Range Priority Weak -> write 0xD191 = 1 and omit 0xD190
+```
+
+On X-H2 firmware 5.20, the camera returned `0x201C` for the `0xD190` write while `0xD191` was
+active. The DR readback stayed unchanged and priority remained active.
+
 ### Writing color-only props for monochrome simulations
 
 Suppress color-only writes when the film simulation is monochrome-like.
@@ -148,6 +165,7 @@ Use targeted names:
 Use a simple color recipe with known values:
 
 - Film Simulation: Velvia
+- D Range Priority: Off
 - Dynamic Range: DR100
 - Grain: Off, write `1`
 - Color Chrome: Off
