@@ -6,6 +6,10 @@ This is not official Fujifilm documentation. It is a public record of observed b
 real camera tests and app implementation work. Treat every body/firmware combination as unknown
 until tested.
 
+> **Warning:** Using this protocol may void your Fujifilm manufacturer warranty. Fujifilm has
+> verbally stated that third-party USB/PTP camera access is covered by the same warranty clause
+> as their SDK EULA (Section 5.2). Use at your own risk.
+
 ## What This Documents
 
 - USB PTP connection requirements for Fuji cameras.
