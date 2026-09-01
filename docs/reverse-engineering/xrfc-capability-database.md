@@ -214,4 +214,4 @@ Full property-by-property detail is in [reference/xrfc-capabilities.xml](referen
 
 ## Unresolved capability limits
 
-This is the client-side tether-RAW-conversion feature table. It directly backs the `XRFC_Cap*` functions. It suggests, but does not prove, what the camera firmware accepts over the wire for the recipe-slot protocol (`0xD18E`-`0xD1A5`). X RAW STUDIO's client-side limitations may differ from the camera's hardware limitations. Confirm firmware rejections via live USB capture.
+This is the client-side tether-RAW-conversion feature table. It directly backs the `XRFC_Cap*` functions. It suggests, but does not prove, what the camera firmware accepts over the wire for the recipe-slot protocol (`0xD18E`-`0xD1A4`). X RAW STUDIO's client-side limitations may differ from the camera's hardware limitations. Confirm firmware rejections via live USB capture.

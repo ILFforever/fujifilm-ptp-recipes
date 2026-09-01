@@ -187,4 +187,5 @@ Use a simple color recipe with known values:
 - Whether X-Trans III bodies expose the same slot-selector property.
 - Whether older bodies have fewer custom slots.
 - Whether any body accepts a wider preset-name character set over PTP.
-- Meaning of unmapped properties in `0xD18E..0xD1A5`.
+- Value encodings for `0xD18E` (Image Size), `0xD18F` (Image Quality), `0xD1A3` (Lens Modulation
+  Optimiser) and `0xD1A4` (Color Space). The properties are identified; their value tables are not.

@@ -30,8 +30,8 @@ little-endian on the wire.
 
 | Setting | Slot code | Live code | Type |
 |---|---|---|---|
-| Image Size ¹ | `0xD18E` | `0xD1A5` | UINT16 |
-| Image Quality / File Type ¹ | `0xD18F` | `0xD018` | UINT16 |
+| Image Size | `0xD18E` | `0xD1A5` | UINT16 |
+| Image Quality | `0xD18F` | `0xD018` | UINT16 |
 | Dynamic Range | `0xD190` | `0xD007` | UINT16 |
 | Wide D-Range / D-Range Priority | `0xD191` | `0xD02E` | UINT16 |
 | Film Simulation | `0xD192` | `0xD001` | UINT16 |
@@ -54,8 +54,9 @@ little-endian on the wire.
 | Lens Modulation Optimiser | `0xD1A3` | `0xD34D` | UINT16 |
 | Color Space | `0xD1A4` | `0xD00A` | UINT16 |
 
-¹ The codes and their behaviour are confirmed; which of Fuji's `FileType` / `ImageSize` /
-`ImageQuality` fields each represents is not yet established.
+The first two rows, Image Size and Image Quality, are not film-simulation settings and are of low
+relevance to recipe work; most implementations omit them. They are listed because they are part of
+the block and because row 1 is the property Fuji's compatibility fallback applies to.
 
 Value encodings are shared with the slot properties — see [properties.md](properties.md). Dynamic
 Range is the literal percentage (`100`/`200`/`400`, `0` = Auto); White Balance uses `0x8007` for
@@ -143,6 +144,51 @@ also agrees on all 23 rows, and every value has since been confirmed on hardware
 Setting names come from Fuji's own XML serializer, which writes the same struct out using names like
 `ConversionProfile.PropertyGroup.DynamicRange`.
 
+### The block is derivable from the struct
+
+A debug routine in Fuji's `XRFC.dll`, `RAWSettingsClass::OutputLog`, prints every `RAWSettings` field
+by name with its offset. The recipe fields occupy one contiguous run:
+
+```text
+0x1050 lShootCondition          0x1088 lWBShootCond
+0x1054 lFileType                0x108c lWhiteBalance
+0x1058 lImageSize               0x1090 lWBShift_R
+0x105c lImageQuality            0x1094 lWBShift_B
+0x1060 lExposureBias            0x1098 lWBColorTemp
+0x1064 lDynamicRange            0x109c lHighLightTone
+0x1068 lWideDynamicRange        0x10a0 lShadowTone
+0x106c lFilmSimulation          0x10a4 lColorMode
+0x1070 lBlackImageTone          0x10a8 lSharpness
+0x1074 lMonochromaticColor_RG   0x10ac lNoiseReduction
+0x1078 lGrainEffect             0x10b0 lClarity
+0x107c lColorChromeEffect       0x10b4 lLMOMode
+0x1080 lColorChromeBlue         0x10b8 lColorSpace
+0x1084 lSmoothSkinEffect
+```
+
+The 23-property block corresponds to **`0x1058` through `0x10b8` in order, skipping `0x1060`
+(`lExposureBias`) and `0x1088` (`lWBShootCond`)**. The field count agrees:
+`(0x10b8 − 0x1058) / 4 + 1 = 25`, less the two skipped fields, gives 23.
+
+Mapping that run onto the property codes reproduces the established meaning at every position —
+`lDynamicRange` at `0xD190`, `lFilmSimulation` at `0xD192`, `lColorMode` at `0xD19F`, `lColorSpace`
+at `0xD1A4`, and so on for 21 of the 23. Those 21 independent agreements fix the alignment, which
+determines the identity of the two remaining positions:
+
+- **Row 1 (`0xD18E` / `0xD1A5`) is `lImageSize`.**
+- **Row 2 (`0xD18F` / `0xD018`) is `lImageQuality`.**
+
+Two consequences follow:
+
+- `lFileType` (`0x1054`) sits one field before the block starts, so it is **not sent to the camera**.
+  X RAW STUDIO selects the output file type on the PC side.
+- The two monochrome codes are Fuji's `lBlackImageTone` (`0xD193`) and `lMonochromaticColor_RG`
+  (`0xD194`) — the warm/cool and magenta/green axes respectively.
+
+Corroborating the row 1 result: `lImageSize` defaults to `7` in Fuji's code, and the X-H2 write test
+read row 1 as `7` before moving it to `8`. `lImageSize` is also the field with seven capability
+variants, which is what the fallback below exists to paper over.
+
 ## The fallback path
 
 Three property codes — `0xD03A`, `0xD03B` and `0xD1A8` — are not settings. They exist only as a
@@ -160,6 +206,12 @@ The fallback is **not** a general retry applied to every setting. It exists for 
 Every other setting is written or read once, with no recovery. If one fails, it simply fails and the
 error is recorded for that property; the function carries on to the next. Only row 1 gets a second
 attempt in a different form.
+
+This is settled, not an assumption. The writer is fully unrolled straight-line code — each property
+is a fixed five-instruction block that builds the request, supplies the value from its struct offset,
+sends it, and stores the result. Only the row 1 blocks have an `if` after them. Across the entire
+2,052-function binary, `0xD03A`, `0xD03B` and `0xD1A8` appear **four times total**: twice in the live
+write branch, once in the slot write branch, once in the read branch. Nothing else references them.
 
 ### The same fallback, implemented per destination
 
@@ -275,20 +327,20 @@ The picture that fits:
 - Consistently, the three fallback codes are not advertised by an X-H2 at all. A body that needs
   them would presumably expose them.
 
-This also strengthens the case that **row 1 is `ImageSize`**: the `RAWSettings` structure has
-`lImageSize`, `lImageQuality` and `lFileType` fields, rows 1 and 2 are two of those three, and
-`ImageSize` is the only one whose encoding varies enough to explain a fallback.
+This is consistent with row 1 being `lImageSize`, established independently above from the struct
+layout: `ImageSize` is the only field in the block whose encoding varies enough to explain a shim.
 
 Still not confirmed: no enum or string table in any binary names what either axis enumerates, and no
 older body has been tested to see the fallback actually fire.
 
 ## Open questions
 
-- **Rows 1 and 2** are two of Fuji's `FileType`, `ImageSize` and `ImageQuality` fields. Which two,
-  and in which order, is not established. `ExposureBias` is ruled out for row 2, because its live
-  counterpart would be the PTP-standard `0x5010` and it is not.
 - **What the two axes of the fallback table enumerate.** A 9-way and a 3-way axis are consistent
-  with image size (three sizes × three aspect ratios), but nothing in the binaries names them.
+  with image size (aspect ratios × L/M/S), but nothing in the binaries names them.
+- **The value tables behind the capability variants.** Fuji records which *variant* of each setting a
+  body uses — `0xD192` Film Simulation has six — but no binary contains the value-to-meaning table
+  for a variant other than the one X-Trans V uses. The property codes are known for every body; the
+  correct values are known only for X-Trans V.
 - **Which bodies actually need the fallback.** Older `Std2` bodies are the likely candidates; none
   has been tested.
 - **Other camera bodies.** Everything here is one X-H2 on firmware 5.20.
@@ -296,7 +348,14 @@ older body has been tested to see the fallback actually fire.
 ## Settings this path does not carry
 
 Fuji's profile format includes these, but the function never sends them to the camera:
-`BlackImageTone`, `GrainEffectSize`, `WBShootCond`, `ExposureBias`, `HDR`, `DigitalTeleConv`,
-`PortraitEnhancer`.
+`FileType`, `ExposureBias`, `WBShootCond`, `GrainEffectSize`, `HDR`, `DigitalTeleConv`,
+`PortraitEnhancer`, `RotationAngle`, `Rating`.
+
+`ExposureBias` and `WBShootCond` are skipped from inside the block's offset run; the rest sit outside
+it entirely. `GrainEffectSize` is not dropped so much as folded in — Fuji combines it with
+`GrainEffect` into the single composite value written to `0xD195`.
 
 If you are looking for a property code for one of those, it is not part of this path.
+
+Note that `BlackImageTone` **is** carried, as `0xD193`. An earlier revision of this document listed
+it here in error.

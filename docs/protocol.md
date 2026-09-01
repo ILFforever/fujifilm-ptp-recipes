@@ -153,12 +153,16 @@ Response codes:
 |---|---:|---|
 | `0xD18C` | 53644 | Slot selector |
 | `0xD18D` | 53645 | Preset name |
-| `0xD18E..0xD1A5` | 53646..53669 | Per-slot recipe property block |
+| `0xD18E..0xD1A4` | 53646..53668 | Per-slot recipe property block (23 properties) |
 | `0xD190` | 53648 | Dynamic Range |
 | `0xD191` | 53649 | Dynamic Range Priority |
 
 The slot selector is the central control point. Write `0xD18C` first, then read or write the name
 and recipe properties for that selected slot.
+
+The block ends at `0xD1A4`. `0xD1A5` is the first property of the **live / C0** block, not a slot
+property — see [current-shooting-state.md](current-shooting-state.md). Fuji's own writer confirms
+the split: its slot path emits `0xD18E`–`0xD1A4` and its live path begins at `0xD1A5`.
 
 Observed slot values:
 
@@ -199,7 +203,7 @@ OPEN_SESSION(session=1)
 GET_DEVICE_INFO
 SET_DEVICE_PROP_VALUE 0xD18C = slot number as uint16LE
 GET_DEVICE_PROP_VALUE 0xD18D = preset name PTP string
-for code in 0xD18E..0xD1A5:
+for code in 0xD18E..0xD1A4:
     GET_DEVICE_PROP_VALUE code
 CLOSE_SESSION
 ```
@@ -218,13 +222,21 @@ Detailed read notes:
 
 ### 8.1 Reading Live Current Values
 
-To read the camera's current live property values independent of any stored slot, issue
-`GET_DEVICE_PROP_VALUE` for each code in `0xD18E..0xD1A5` without writing the slot selector first.
-This returns the active settings the camera is currently using, regardless of which custom slot was
-last selected or whether the camera is in a custom slot at all.
+To read values without committing to a slot selection, issue `GET_DEVICE_PROP_VALUE` for each code
+in `0xD18E..0xD1A4` without writing the slot selector first. This returns the block for whichever
+slot the selector currently points at.
 
-This pattern is useful for editor views and for importing the camera's current state into the app
-without committing to a slot selection first.
+**This is not the same as reading the camera's live shooting state.** When a custom slot is recalled
+and unmodified, the two coincide, which is why this pattern works in practice on X-Trans V. When the
+camera is in P/A/S/M, or the user has adjusted settings since recalling a slot, they diverge: on an
+X-H2 in one session, slot Film Simulation (`0xD192`, C7 selected) read `12` while live Film
+Simulation (`0xD001`) read `4`.
+
+The live shooting state has its own separate property codes. To read it properly, see
+[current-shooting-state.md](current-shooting-state.md).
+
+This pattern is still useful for editor views and for importing the currently selected slot without
+writing the selector first.
 
 ## 9. Write Flow
 
@@ -375,7 +387,7 @@ Read C3:
 <- DATA tx=5 payload=<value>
 <- RESPONSE_OK tx=5
 
-... repeat through 0xD1A5 ...
+... repeat through 0xD1A4 ...
 
 -> CLOSE_SESSION tx=N
 <- RESPONSE_OK tx=N
@@ -419,7 +431,8 @@ Write C3 name and two properties:
 
 - X-Pro3 does not work with the current protocol path so far. Diagnosis needed.
 - X-Trans III bodies are untested.
-- Some unknown properties in `0xD18E..0xD1A5` remain unmapped.
+- Value encodings for `0xD18E`, `0xD18F`, `0xD1A3` and `0xD1A4` remain unmapped, though the
+  properties themselves are now identified.
 - Some bodies may use fewer or different custom slots.
 - Camera UI character entry and PTP name writes may not accept the same character set.
 

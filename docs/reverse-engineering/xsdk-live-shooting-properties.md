@@ -5,7 +5,7 @@ FUJIFILM X RAW STUDIO.
 
 **Live shooting / tethering properties** — read during an active tethered session (remote shutter
 release, live exposure control, movie mode). Mostly disjoint from the recipe-slot block in
-[properties.md](../properties.md) (`0xD18E`–`0xD1A5`). Not yet confirmed against live USB traffic;
+[properties.md](../properties.md) (`0xD18E`–`0xD1A4`). Not yet confirmed against live USB traffic;
 treat as INFERRED until cross-checked.
 
 > **Scope caveat.** X RAW STUDIO binds only 21 of `XGFXAPI.dll`'s 126 exports. **None** of the

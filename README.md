@@ -16,7 +16,7 @@ until tested.
 - The PTP packet and transaction shapes used for recipe-slot access.
 - Slot selection through Fuji vendor property `0xD18C`.
 - Preset-name reads/writes through `0xD18D`.
-- Recipe property reads/writes in `0xD18E..0xD1A5`.
+- Recipe property reads/writes in `0xD18E..0xD1A4`.
 - Known property encodings for film simulation, white balance, dynamic range, dynamic range
   priority, tone, color, sharpness, clarity, high ISO NR, grain, color chrome, smooth skin, and
   WB shift.

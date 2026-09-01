@@ -31,7 +31,7 @@ internals (OpenCV, Boost, CRT).
 |---|---:|---:|---|
 | `FTLPTP.dll` | 599 | ~30 | Transport fully mapped. 17 PTP opcode builders enumerated. Worker-thread transaction model traced. HRESULT to PTP error mapping resolved. WPD GUIDs resolved. `OpenSession` and `CloseSession` stubs aliased. |
 | `XGFXAPI.dll` | 2,052 | ~100 | 126 exports swept. Internal command IDs recovered for all 126. Dispatcher core, handle registry, and param-object layout traced. Value-shape constraint and 31-slot FTL binding table traced. `0xD235` and `FTLPTPIP.dll` load path traced. |
-| `XRFC.dll` | 14,496 | ~10 | `CapabilityClass::ReadCapabilityFile` decode routine traced. `XRFCClass::OpenUSB` connect sequence traced. `XSDKClass::LoadXSDK` traced. |
+| `XRFC.dll` | 14,496 | ~15 | `CapabilityClass::ReadCapabilityFile` decode routine traced. `XRFCClass::OpenUSB` connect sequence traced. `XSDKClass::LoadXSDK` traced. `RAWSettingsClass::OutputLog` recovered, giving the full named struct layout. `RAWSettings` to parameter-array serializer traced. |
 | `FUJIFILM_X_RAW_STUDIO.exe` | 2,047 | 0 | Full dump generated. Never opened. |
 
 ## Verified findings
@@ -67,6 +67,23 @@ internals (OpenCV, Boost, CRT).
   [xrfc-capability-database.md](xrfc-capability-database.md#full-device-to-config-map)
 - ✅ SDK property value shapes constrained to a 1–6 byte scalar or a `0xffff` variable-length
   string.
+- ✅ `RAWSettingsClass::OutputLog` in `XRFC.dll` recovered — names every `RAWSettings` field with its
+  struct offset. The 23-property block is `0x1058`–`0x10b8` in order, skipping `lExposureBias` and
+  `lWBShootCond`.
+- ✅ Row 1 identified as `lImageSize` and row 2 as `lImageQuality`, from 21 independent positional
+  agreements against already-known codes. `lFileType` is not sent to the camera.
+  [current-shooting-state.md](../current-shooting-state.md#the-block-is-derivable-from-the-struct)
+- ✅ `0xD193` identified as `lBlackImageTone` and `0xD194` as `lMonochromaticColor_RG`. Corrects an
+  earlier claim that `BlackImageTone` was not carried.
+- ✅ Slot block bounded at `0xD18E`–`0xD1A4`; `0xD1A5` belongs to the live block. Confirmed from the
+  emit order of both write branches.
+- ✅ Row-1-only scope of the fallback confirmed structurally: the writer is unrolled straight-line
+  code, and `0xD03A`/`0xD03B`/`0xD1A8` appear exactly 4 times in the whole binary.
+- ✅ Per-property generation risk derived from the capability table — 5 universal properties, 7 with
+  varying encodings, 10 absent on some bodies.
+  [protocol-status.md](../protocol-status.md#which-properties-differ-by-generation)
+- ✅ Colour Temperature `0xD19C` is emitted out of numeric order, immediately after White Balance
+  `0xD199`, confirming the prerequisite ordering rule. [properties.md](../properties.md#suggested-write-order)
 
 ## Open tasks
 
@@ -74,8 +91,15 @@ internals (OpenCV, Boost, CRT).
   behavior for a missing capability record and exact error condition paths in `OpenUSB`.
 - ⬜ The RAW conversion round-trip sequence and completion polling model on the wire.
   `XSDK_SendRAWFromPC`, `SetRAWSettings`, and `ConvertRAWImage` are bound but untraced.
-- ⬜ `RAWSettingsClass` methods in `XRFC.dll` for profile save, load, and history. Decompilation
-  required to check for a plain-text recipe interchange format.
+- 🟡 `RAWSettingsClass` in `XRFC.dll`. Struct layout fully recovered from `OutputLog`, and the
+  `XRFC_{Clear,Get,Save,Load,Renew}RAWSettings` exports located. The on-disk profile save/load format
+  is still untraced — an XML serializer writing `ConversionProfile.PropertyGroup.*` keys is present
+  and is the obvious next thread for a plain-text recipe interchange format.
+- ⬜ **Per-generation value tables.** The highest-value open item. Fuji's capability data names the
+  encoding variant each body uses (`0xD192` Film Simulation has six) but no value-to-meaning table
+  for non-X-Trans-V variants has been found. Without these, correct values are known only for
+  X-Trans V even though the property codes are known for every body. Search `XRFC.dll` for the
+  variant-keyed lookup that consumes the `type="Std…"` attributes.
 - ⬜ `XGFXAPI.dll` command classes for aperture, shutter speed, dynamic range, and RAW send. Manual
   vtable tracing required.
 - ⬜ `0xD185` unused property in the tether block. Requires probing on a live body.
