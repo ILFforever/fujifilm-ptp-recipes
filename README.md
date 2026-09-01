@@ -32,7 +32,7 @@ Protocol documentation
 | [Protocol status](docs/protocol-status.md) | **Read first.** What is stable, what is work in progress, and what will break outside X-Trans V. |
 | [Protocol](docs/protocol.md) | Full USB/PTP protocol flow, packet format, session handling, read/write traces. |
 | [Properties](docs/properties.md) | Complete known recipe property table and value encodings. |
-| [Current shooting state (C0)](docs/current-shooting-state.md) | Applying a recipe to the camera's current shooting state instead of a C1-C7 slot. The live state has its own property codes; there is no slot `0`. **X-Trans V only so far — see caveat below.** |
+| [Current shooting state (C0)](docs/current-shooting-state.md) | Applying a recipe to the camera's current shooting state instead of a C1-C7 slot. The live state has its own property codes; there is no slot `0`. **Unfinished reverse engineering — see caveat below.** |
 | [EXIF MakerNote](docs/exif-makernote.md) | Maps Fujifilm MakerNote EXIF tags to recipe parameters for JPEG import. |
 | [Name rules](docs/name-rules.md) | Preset-name length, allowed characters, normalization, and gotchas. |
 | [Implementation notes](docs/implementation-notes.md) | Practical guidance for building a reader/writer. |
@@ -40,8 +40,11 @@ Protocol documentation
 | [Testing checklist](docs/testing-checklist.md) | Step-by-step process for testing a new body or firmware. |
 | [Python reference snippets](examples/python/ptp_recipe_reference.py) | Constants, encoders, and write/read pseudocode. |
 
-> **Current shooting state (C0) is confirmed on X-Trans V only** and should be expected to fail on
-> other generations. It is unfinished reverse engineering, not a settled protocol — see
+> **Everything in this repo that is known to work is confirmed on X-Trans V only**, and should be
+> expected to fail on other generations. That applies to the C1-C7 slot protocol as much as to the
+> current shooting state (C0): the one non-X-Trans-V body tested so far, an X-Pro3 (X-Trans IV),
+> fails at C1-C7 outright, and no X-Trans III body has been tested at all. C0 is *additionally*
+> unfinished reverse engineering rather than a settled protocol. See
 > [protocol status](docs/protocol-status.md) for exactly what is confirmed, what is not, and why.
 
 ### Reverse engineering
