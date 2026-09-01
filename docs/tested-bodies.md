@@ -8,6 +8,14 @@ Please add body reports with exact camera model, firmware, USB mode, and result.
 | X-T5 | 4.20 | USB RAW Conv. / Backup Restore | OK | OK | OK | Confirmed working in app testing. |
 | X-Pro3 | 2.00 | USB RAW Conv. / Backup Restore | Fails so far | Fails so far | Fails so far | Does not work with the current protocol path so far. Needs more diagnosis. |
 
+## Current shooting state (C0)
+
+The table above covers **C1–C7 slots only**. Applying a recipe to the camera's current shooting
+state uses different property codes and has only been confirmed on an X-H2 (firmware 5.20). It is
+expected to fail on other generations — see [protocol status](protocol-status.md).
+
+C0 reports from any other body are especially wanted.
+
 ## Untested Families
 
 - X-Trans III bodies are currently untested.

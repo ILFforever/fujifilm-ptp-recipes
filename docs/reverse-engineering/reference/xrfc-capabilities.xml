@@ -1,0 +1,1124 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ConversionCaps Application="Tether-RAW" Version="1.9" >
+    <Compatibilitys>
+        <Compatibility Device="X-H1_0100">X-H1Config1</Compatibility>
+        <Compatibility Device="X-T3_0100">X-T3Config1</Compatibility>
+        <Compatibility Device="X-T2_0100">X-T2Config1</Compatibility>
+        <Compatibility Device="X-Pro2_0100">XPro2Config1</Compatibility>
+        <Compatibility Device="X100F_0100">X100FConfig1</Compatibility>
+        <Compatibility Device="GFX50S_0100">GfxConfig1</Compatibility>
+        <Compatibility Device="GFX50S_0200">GfxConfig1</Compatibility>
+        <Compatibility Device="GFX50S_0300">GfxConfig2</Compatibility>
+        <Compatibility Device="GFX50R_0100">GfxConfig1</Compatibility>
+        <Compatibility Device="GFX50R_0200">GfxConfig2</Compatibility>
+        <Compatibility Device="X-T30_0100">X-T30Config1</Compatibility>
+        <Compatibility Device="X-T20_0100">X-T20Config1</Compatibility>
+        <Compatibility Device="X-E3_0100">X-E3Config1</Compatibility>
+        <Compatibility Device="GFX100_0100">Gfx100Config1</Compatibility>
+        <Compatibility Device="GFX100_0200">Gfx100Config2</Compatibility>
+        <Compatibility Device="GFX100_0300">Gfx100Config3</Compatibility>
+        <Compatibility Device="X-Pro3_0100">XPro3Config1</Compatibility>
+        <Compatibility Device="X100V_0100">X100VConfig1</Compatibility>
+        <Compatibility Device="X100V_0200">X100VConfig2</Compatibility>
+        <Compatibility Device="X-T4_0100">X-T4Config1</Compatibility>
+        <Compatibility Device="X-S10_0100">X-S10Config1</Compatibility>
+        <Compatibility Device="X-E4_0100">X-S10Config1</Compatibility>
+        <Compatibility Device="X-T30II_0100">X-S10Config1</Compatibility>
+        <Compatibility Device="X-H2S_0100">X-H2SConfig1</Compatibility>
+        <Compatibility Device="X-H2S_0200">X-H2SConfig2</Compatibility>
+        <Compatibility Device="X-H2_0100">X-H2Config1</Compatibility>
+        <Compatibility Device="X-H2_0200">X-H2Config2</Compatibility>
+        <Compatibility Device="X-T5_0100">X-T5Config1</Compatibility>
+        <Compatibility Device="X-T5_0200">X-T5Config2</Compatibility>
+        <Compatibility Device="X-S20_0100">X-S20Config1</Compatibility>
+        <Compatibility Device="X-S20_0200">X-S20Config2</Compatibility>
+        <Compatibility Device="GFX100S_0100">Gfx100SConfig1</Compatibility>
+        <Compatibility Device="GFX50SII_0100">Gfx50SIIConfig1</Compatibility>
+        <Compatibility Device="GFX100II_0100">Gfx100IIConfig1</Compatibility>
+        <Compatibility Device="GFX100SII_0100">Gfx100SIIConfig1</Compatibility>
+        <Compatibility Device="GFX100RF_0100">Gfx100RFConfig1</Compatibility>
+        <Compatibility Device="X-T50_0100">X-T50Config1</Compatibility>
+        <Compatibility Device="X100VI_0100">X100VIConfig1</Compatibility>
+        <Compatibility Device="X-M5_0100">X-M5Config1</Compatibility>
+        <Compatibility Device="X-E5_0100">X-E5Config1</Compatibility>
+        <Compatibility Device="X-T30III_0100">X-T30IIIConfig1</Compatibility>
+        <DefaultConfig>StdConfig1</DefaultConfig>
+    </Compatibilitys>
+    <PropertyGroups>
+        <!-- [true/false] is lowercase only -->
+        <PropertyGroup Config="X-H1Config1" >
+            <FileType type="Std1">false</FileType>
+            <ImageSize type="Std2">true</ImageSize>           <!-- [type] is Std1 or Std2 or Ext1 -->
+            <ImageQuality type="Std1">true</ImageQuality>     <!-- [type] is Std1 or Ext1 -->
+            <PreviewImage>true</PreviewImage>
+            <ExposureBias>true</ExposureBias>
+            <ExposureBiasRange>M2P3</ExposureBiasRange>
+            <DynamicRange>true</DynamicRange>
+            <WideDynamicRange>true</WideDynamicRange>
+            <FilmSimulation type="Std2">true</FilmSimulation> <!-- [type] is Std1 or Std2 -->
+            <BlackImageTone>false</BlackImageTone>
+            <GrainEffect type="Std1">true</GrainEffect>
+            <ChromeEffect>false</ChromeEffect>
+            <SmoothSkinEffect>false</SmoothSkinEffect>
+            <WhiteBalance type="Std1">true</WhiteBalance>     <!-- [type] is Std1 only -->
+            <WBColorTemp type="Std1">true</WBColorTemp>       <!-- [type] is Std1 only -->
+            <WBShift_RB>true</WBShift_RB>
+            <HighlightTone type="Std1">true</HighlightTone>
+            <ShadowTone type="Std1">true</ShadowTone>
+            <Color>true</Color>
+            <Sharpness>true</Sharpness>
+            <NoiseReduction type="Std1">true</NoiseReduction>
+            <LensModulationOpt>true</LensModulationOpt>
+            <ColorSpace>true</ColorSpace>
+            <Rating>false</Rating>
+        </PropertyGroup>
+        <PropertyGroup Config="X-T3Config1" >
+            <FileType type="Std1">false</FileType>
+            <ImageSize type="Std2">true</ImageSize>           <!-- [type] is Std1 or Std2 or Ext1 -->
+            <ImageQuality type="Std1">true</ImageQuality>     <!-- [type] is Std1 or Ext1 -->
+            <PreviewImage>true</PreviewImage>
+            <ExposureBias>true</ExposureBias>
+            <ExposureBiasRange>M2P3</ExposureBiasRange>
+            <DynamicRange>true</DynamicRange>
+            <WideDynamicRange>true</WideDynamicRange>
+            <FilmSimulation type="Std2">true</FilmSimulation> <!-- [type] is Std1 or Std2 -->
+            <BlackImageTone>true</BlackImageTone>
+            <GrainEffect type="Std1">true</GrainEffect>
+            <ChromeEffect>true</ChromeEffect>
+            <SmoothSkinEffect>false</SmoothSkinEffect>
+            <WhiteBalance type="Std1">true</WhiteBalance>     <!-- [type] is Std1 only -->
+            <WBColorTemp type="Std1">true</WBColorTemp>       <!-- [type] is Std1 only -->
+            <WBShift_RB>true</WBShift_RB>
+            <HighlightTone type="Std1">true</HighlightTone>
+            <ShadowTone type="Std1">true</ShadowTone>
+            <Color>true</Color>
+            <Sharpness>true</Sharpness>
+            <NoiseReduction type="Std1">true</NoiseReduction>
+            <LensModulationOpt>true</LensModulationOpt>
+            <ColorSpace>true</ColorSpace>
+            <Rating>false</Rating>
+        </PropertyGroup>
+        <PropertyGroup Config="X-T2Config1" >
+            <FileType type="Std1">false</FileType>
+            <ImageSize type="Std1">false</ImageSize>          <!-- [type] is Std1 or Std2 or Ext1 -->
+            <ImageQuality type="Std1">false</ImageQuality>    <!-- [type] is Std1 or Ext1 -->
+            <PreviewImage>true</PreviewImage>
+            <ExposureBias>true</ExposureBias>
+            <ExposureBiasRange>M2P3</ExposureBiasRange>
+            <DynamicRange>true</DynamicRange>
+            <WideDynamicRange>false</WideDynamicRange>
+            <FilmSimulation type="Std1">true</FilmSimulation> <!-- [type] is Std1 or Std2 -->
+            <BlackImageTone>false</BlackImageTone>
+            <GrainEffect type="Std1">true</GrainEffect>
+            <ChromeEffect>false</ChromeEffect>
+            <SmoothSkinEffect>false</SmoothSkinEffect>
+            <WhiteBalance type="Std1">true</WhiteBalance>     <!-- [type] is Std1 only -->
+            <WBColorTemp type="Std1">true</WBColorTemp>       <!-- [type] is Std1 only -->
+            <WBShift_RB>true</WBShift_RB>
+            <HighlightTone type="Std1">true</HighlightTone>
+            <ShadowTone type="Std1">true</ShadowTone>
+            <Color>true</Color>
+            <Sharpness>true</Sharpness>
+            <NoiseReduction type="Std1">true</NoiseReduction>
+            <LensModulationOpt>true</LensModulationOpt>
+            <ColorSpace>true</ColorSpace>
+            <Rating>false</Rating>
+        </PropertyGroup>
+        <PropertyGroup Config="XPro2Config1" >
+            <FileType type="Std1">false</FileType>
+            <ImageSize type="Std1">false</ImageSize>          <!-- [type] is Std1 or Std2 or Ext1 -->
+            <ImageQuality type="Std1">false</ImageQuality>    <!-- [type] is Std1 or Ext1 -->
+            <PreviewImage>true</PreviewImage>
+            <ExposureBias>true</ExposureBias>
+            <ExposureBiasRange>M2P3</ExposureBiasRange>
+            <DynamicRange>true</DynamicRange>
+            <WideDynamicRange>false</WideDynamicRange>
+            <FilmSimulation type="Std1">true</FilmSimulation> <!-- [type] is Std1 or Std2 -->
+            <BlackImageTone>false</BlackImageTone>
+            <GrainEffect type="Std1">true</GrainEffect>
+            <ChromeEffect>false</ChromeEffect>
+            <SmoothSkinEffect>false</SmoothSkinEffect>
+            <WhiteBalance type="Std1">true</WhiteBalance>     <!-- [type] is Std1 only -->
+            <WBColorTemp type="Std1">true</WBColorTemp>       <!-- [type] is Std1 only -->
+            <WBShift_RB>true</WBShift_RB>
+            <HighlightTone type="Std1">true</HighlightTone>
+            <ShadowTone type="Std1">true</ShadowTone>
+            <Color>true</Color>
+            <Sharpness>true</Sharpness>
+            <NoiseReduction type="Std1">true</NoiseReduction>
+            <LensModulationOpt>true</LensModulationOpt>
+            <ColorSpace>true</ColorSpace>
+            <Rating>false</Rating>
+        </PropertyGroup>
+        <PropertyGroup Config="XPro3Config1" >
+            <FileType type="Ext1">true</FileType>
+            <ImageSize type="Std2">true</ImageSize>          <!-- [type] is Std1 or Std2 or Ext1 -->
+            <ImageQuality type="Std1">true</ImageQuality>    <!-- [type] is Std1 or Ext1 -->
+            <PreviewImage>true</PreviewImage>
+            <ExposureBias>true</ExposureBias>
+            <ExposureBiasRange>M2P3</ExposureBiasRange>
+            <DynamicRange>true</DynamicRange>
+            <WideDynamicRange>true</WideDynamicRange>
+            <FilmSimulation type="Std3">true</FilmSimulation> <!-- [type] is Std1 or Std2 or Std3-->
+            <BlackImageTone>false</BlackImageTone>
+            <MonochromaticColor>true</MonochromaticColor>
+            <GrainEffect type="Std2">true</GrainEffect>
+            <ChromeEffect>true</ChromeEffect>
+            <ColorChromeBlue>true</ColorChromeBlue>
+            <SmoothSkinEffect>false</SmoothSkinEffect>
+            <WhiteBalance type="Std1">true</WhiteBalance>     <!-- [type] is Std1 only -->
+            <WBColorTemp type="Std2">true</WBColorTemp>       <!-- [type] is Std1 or Std2 -->
+            <WBShift_RB>true</WBShift_RB>
+            <HighlightTone type="Std1">true</HighlightTone>
+            <ShadowTone type="Std1">true</ShadowTone>
+            <Color>true</Color>
+            <Sharpness>true</Sharpness>
+            <NoiseReduction type="Std1">true</NoiseReduction>
+            <Clarity>true</Clarity>
+            <LensModulationOpt>true</LensModulationOpt>
+            <ColorSpace>true</ColorSpace>
+            <Rating>false</Rating>
+            <CustomSetting>true</CustomSetting>
+            <HDR>true</HDR>
+        </PropertyGroup>
+        <PropertyGroup Config="X100VConfig1" >
+            <FileType type="Std1">false</FileType>
+            <ImageSize type="Std2">true</ImageSize>          <!-- [type] is Std1 or Std2 or Ext1 -->
+            <ImageQuality type="Std1">true</ImageQuality>    <!-- [type] is Std1 or Ext1 -->
+            <PreviewImage>true</PreviewImage>
+            <ExposureBias>true</ExposureBias>
+            <ExposureBiasRange>M2P3</ExposureBiasRange>
+            <DynamicRange>true</DynamicRange>
+            <WideDynamicRange>true</WideDynamicRange>
+            <FilmSimulation type="Std3">true</FilmSimulation> <!-- [type] is Std1 or Std2 or Std3-->
+            <BlackImageTone>false</BlackImageTone>
+            <MonochromaticColor>true</MonochromaticColor>
+            <GrainEffect type="Std2">true</GrainEffect>
+            <ChromeEffect>true</ChromeEffect>
+            <ColorChromeBlue>true</ColorChromeBlue>
+            <SmoothSkinEffect>false</SmoothSkinEffect>
+            <WhiteBalance type="Std1">true</WhiteBalance>     <!-- [type] is Std1 only -->
+            <WBColorTemp type="Std2">true</WBColorTemp>       <!-- [type] is Std1 or Std2 -->
+            <WBShift_RB>true</WBShift_RB>
+            <HighlightTone type="Std1">true</HighlightTone>
+            <ShadowTone type="Std1">true</ShadowTone>
+            <Color>true</Color>
+            <Sharpness>true</Sharpness>
+            <NoiseReduction type="Std1">true</NoiseReduction>
+            <Clarity>true</Clarity>
+            <LensModulationOpt>false</LensModulationOpt>
+            <ColorSpace>true</ColorSpace>
+            <Rating>false</Rating>
+            <CustomSetting>true</CustomSetting>
+            <HDR>true</HDR>
+        </PropertyGroup>
+        <PropertyGroup Config="X100VConfig2" >
+            <FileType type="Std1">false</FileType>
+            <ImageSize type="Std2">true</ImageSize>          <!-- [type] is Std1 or Std2 or Ext1 -->
+            <ImageQuality type="Std1">true</ImageQuality>    <!-- [type] is Std1 or Ext1 -->
+            <PreviewImage>true</PreviewImage>
+            <ExposureBias>true</ExposureBias>
+            <ExposureBiasRange>M2P3</ExposureBiasRange>
+            <DynamicRange>true</DynamicRange>
+            <WideDynamicRange>true</WideDynamicRange>
+            <FilmSimulation type="Std3">true</FilmSimulation> <!-- [type] is Std1 or Std2 or Std3-->
+            <BlackImageTone>false</BlackImageTone>
+            <MonochromaticColor>true</MonochromaticColor>
+            <GrainEffect type="Std2">true</GrainEffect>
+            <ChromeEffect>true</ChromeEffect>
+            <ColorChromeBlue>true</ColorChromeBlue>
+            <SmoothSkinEffect>false</SmoothSkinEffect>
+            <WhiteBalance type="Std1">true</WhiteBalance>     <!-- [type] is Std1 only -->
+            <WBColorTemp type="Std2">true</WBColorTemp>       <!-- [type] is Std1 or Std2 -->
+            <WBShift_RB>true</WBShift_RB>
+            <HighlightTone type="Std1">true</HighlightTone>
+            <ShadowTone type="Std1">true</ShadowTone>
+            <Color>true</Color>
+            <Sharpness>true</Sharpness>
+            <NoiseReduction type="Std1">true</NoiseReduction>
+            <Clarity>true</Clarity>
+            <LensModulationOpt>false</LensModulationOpt>
+            <ColorSpace>true</ColorSpace>
+            <Rating>false</Rating>
+            <CustomSetting>true</CustomSetting>
+            <HDR>true</HDR>
+            <DigitalTeleConv>true</DigitalTeleConv>
+        </PropertyGroup>
+        <PropertyGroup Config="GfxConfig1" >
+            <FileType type="Std1">true</FileType>
+            <ImageSize type="Ext1">true</ImageSize>           <!-- [type] is Std1 or Std2 or Ext1 -->
+            <ImageQuality type="Ext1">true</ImageQuality>     <!-- [type] is Std1 or Ext1 -->
+            <PreviewImage>true</PreviewImage>
+            <ExposureBias>true</ExposureBias>
+            <ExposureBiasRange>M2P3</ExposureBiasRange>
+            <DynamicRange>true</DynamicRange>
+            <WideDynamicRange>false</WideDynamicRange>
+            <FilmSimulation type="Std1">true</FilmSimulation> <!-- [type] is Std1 or Std2 -->
+            <BlackImageTone>false</BlackImageTone>
+            <GrainEffect type="Std1">true</GrainEffect>
+            <ChromeEffect>true</ChromeEffect>
+            <SmoothSkinEffect>false</SmoothSkinEffect>
+            <WhiteBalance type="Std1">true</WhiteBalance>     <!-- [type] is Std1 only -->
+            <WBColorTemp type="Std1">true</WBColorTemp>       <!-- [type] is Std1 only -->
+            <WBShift_RB>true</WBShift_RB>
+            <HighlightTone type="Std1">true</HighlightTone>
+            <ShadowTone type="Std1">true</ShadowTone>
+            <Color>true</Color>
+            <Sharpness>true</Sharpness>
+            <NoiseReduction type="Std1">true</NoiseReduction>
+            <LensModulationOpt>true</LensModulationOpt>
+            <ColorSpace>true</ColorSpace>
+            <Rating>false</Rating>
+        </PropertyGroup>
+        <PropertyGroup Config="GfxConfig2" >
+            <FileType type="Std1">true</FileType>
+            <ImageSize type="Ext1">true</ImageSize>           <!-- [type] is Std1 or Std2 or Ext1 -->
+            <ImageQuality type="Ext1">true</ImageQuality>     <!-- [type] is Std1 or Ext1 -->
+            <PreviewImage>true</PreviewImage>
+            <ExposureBias>true</ExposureBias>
+            <ExposureBiasRange>M2P3</ExposureBiasRange>
+            <DynamicRange>true</DynamicRange>
+            <WideDynamicRange>false</WideDynamicRange>
+            <FilmSimulation type="Std3">true</FilmSimulation> <!-- [type] is Std1 or Std2 or Std3-->
+            <BlackImageTone>false</BlackImageTone>
+            <GrainEffect type="Std1">true</GrainEffect>
+            <ChromeEffect>true</ChromeEffect>
+            <SmoothSkinEffect>true</SmoothSkinEffect>
+            <WhiteBalance type="Std1">true</WhiteBalance>     <!-- [type] is Std1 only -->
+            <WBColorTemp type="Std1">true</WBColorTemp>       <!-- [type] is Std1 only -->
+            <WBShift_RB>true</WBShift_RB>
+            <HighlightTone type="Std1">true</HighlightTone>
+            <ShadowTone type="Std1">true</ShadowTone>
+            <Color>true</Color>
+            <Sharpness>true</Sharpness>
+            <NoiseReduction type="Std1">true</NoiseReduction>
+            <LensModulationOpt>true</LensModulationOpt>
+            <ColorSpace>true</ColorSpace>
+            <Rating>false</Rating>
+        </PropertyGroup>
+        <PropertyGroup Config="Gfx100Config1" >
+            <FileType type="Ext1">true</FileType>
+            <ImageSize type="Ext2">true</ImageSize>           <!-- [type] is Std1 or Std2 or Ext1 -->
+            <ImageQuality type="Ext1">true</ImageQuality>     <!-- [type] is Std1 or Ext1 -->
+            <PreviewImage>true</PreviewImage>
+            <ExposureBias>true</ExposureBias>
+            <ExposureBiasRange>M2P3</ExposureBiasRange>
+            <DynamicRange>true</DynamicRange>
+            <WideDynamicRange>true</WideDynamicRange>
+            <FilmSimulation type="Std2">true</FilmSimulation> <!-- [type] is Std1 or Std2 -->
+            <BlackImageTone>true</BlackImageTone>
+            <GrainEffect type="Std1">true</GrainEffect>
+            <ChromeEffect>true</ChromeEffect>
+            <SmoothSkinEffect>true</SmoothSkinEffect>
+            <WhiteBalance type="Std1">true</WhiteBalance>     <!-- [type] is Std1 only -->
+            <WBColorTemp type="Std1">true</WBColorTemp>       <!-- [type] is Std1 only -->
+            <WBShift_RB>true</WBShift_RB>
+            <HighlightTone type="Std1">true</HighlightTone>
+            <ShadowTone type="Std1">true</ShadowTone>
+            <Color>true</Color>
+            <Sharpness>true</Sharpness>
+            <NoiseReduction type="Std1">true</NoiseReduction>
+            <LensModulationOpt>true</LensModulationOpt>
+            <ColorSpace>true</ColorSpace>
+            <Rating>false</Rating>
+            <Battery>Type2</Battery>
+        </PropertyGroup>
+        <PropertyGroup Config="Gfx100Config2" >
+            <FileType type="Ext1">true</FileType>
+            <ImageSize type="Ext2">true</ImageSize>           <!-- [type] is Std1 or Std2 or Ext1 -->
+            <ImageQuality type="Ext1">true</ImageQuality>     <!-- [type] is Std1 or Ext1 -->
+            <PreviewImage>true</PreviewImage>
+            <ExposureBias>true</ExposureBias>
+            <ExposureBiasRange>M2P3</ExposureBiasRange>
+            <DynamicRange>true</DynamicRange>
+            <WideDynamicRange>true</WideDynamicRange>
+            <FilmSimulation type="Std4">true</FilmSimulation> <!-- [type] is Std1 or Std2 or Std3 or Std4 -->
+            <BlackImageTone>true</BlackImageTone>
+            <GrainEffect type="Std2">true</GrainEffect>
+            <ChromeEffect>true</ChromeEffect>
+            <ColorChromeBlue>true</ColorChromeBlue>
+            <SmoothSkinEffect>true</SmoothSkinEffect>
+            <WhiteBalance type="Std1">true</WhiteBalance>     <!-- [type] is Std1 only -->
+            <WBColorTemp type="Std1">true</WBColorTemp>       <!-- [type] is Std1 only -->
+            <WBShift_RB>true</WBShift_RB>
+            <HighlightTone type="Std1">true</HighlightTone>
+            <ShadowTone type="Std1">true</ShadowTone>
+            <Color>true</Color>
+            <Sharpness>true</Sharpness>
+            <NoiseReduction type="Std1">true</NoiseReduction>
+            <LensModulationOpt>true</LensModulationOpt>
+            <ColorSpace>true</ColorSpace>
+            <Rating>false</Rating>
+            <Battery>Type2</Battery>
+        </PropertyGroup>
+        <PropertyGroup Config="Gfx100Config3" >
+            <FileType type="Ext1">true</FileType>
+            <ImageSize type="Ext2">true</ImageSize>           <!-- [type] is Std1 or Std2 or Ext1 -->
+            <ImageQuality type="Ext1">true</ImageQuality>     <!-- [type] is Std1 or Ext1 -->
+            <PreviewImage>true</PreviewImage>
+            <ExposureBias>true</ExposureBias>
+            <ExposureBiasRange>M2P3</ExposureBiasRange>
+            <DynamicRange>true</DynamicRange>
+            <WideDynamicRange>true</WideDynamicRange>
+            <FilmSimulation type="Std5">true</FilmSimulation> <!-- [type] is Std1 or Std2 or Std3 or Std4 or Std5 -->
+            <BlackImageTone>false</BlackImageTone>
+            <MonochromaticColor>true</MonochromaticColor>
+            <GrainEffect type="Std2">true</GrainEffect>
+            <ChromeEffect>true</ChromeEffect>
+            <ColorChromeBlue>true</ColorChromeBlue>
+            <SmoothSkinEffect>true</SmoothSkinEffect>
+            <WhiteBalance type="Std1">true</WhiteBalance>     <!-- [type] is Std1 or Std2 -->
+            <WBColorTemp type="Std1">true</WBColorTemp>       <!-- [type] is Std1 or Std2 -->
+            <WBShift_RB>true</WBShift_RB>
+            <HighlightTone type="Std2">true</HighlightTone>   <!-- [type] is Std1 or Std2 -->
+            <ShadowTone type="Std2">true</ShadowTone>         <!-- [type] is Std1 or Std2 -->
+            <Color>true</Color>
+            <Sharpness>true</Sharpness>
+            <NoiseReduction type="Std2">true</NoiseReduction> <!-- [type] is Std1 or Std2 -->
+            <Clarity>true</Clarity>
+            <LensModulationOpt>true</LensModulationOpt>
+            <ColorSpace>true</ColorSpace>
+            <Rating>false</Rating>
+            <Battery>Type2</Battery>
+            <CustomSetting>true</CustomSetting>
+            <HDR>false</HDR>
+        </PropertyGroup>
+        <PropertyGroup Config="X100FConfig1" >
+            <FileType type="Std1">false</FileType>
+            <ImageSize type="Std1">false</ImageSize>          <!-- [type] is Std1 or Std2 or Ext1 -->
+            <ImageQuality type="Std1">false</ImageQuality>    <!-- [type] is Std1 or Ext1 -->
+            <PreviewImage>true</PreviewImage>
+            <ExposureBias>true</ExposureBias>
+            <ExposureBiasRange>M2P3</ExposureBiasRange>
+            <DynamicRange>true</DynamicRange>
+            <WideDynamicRange>false</WideDynamicRange>
+            <FilmSimulation type="Std1">true</FilmSimulation> <!-- [type] is Std1 or Std2 -->
+            <BlackImageTone>false</BlackImageTone>
+            <GrainEffect type="Std1">true</GrainEffect>
+            <ChromeEffect>false</ChromeEffect>
+            <SmoothSkinEffect>false</SmoothSkinEffect>
+            <WhiteBalance type="Std1">true</WhiteBalance>     <!-- [type] is Std1 only -->
+            <WBColorTemp type="Std1">true</WBColorTemp>       <!-- [type] is Std1 only -->
+            <WBShift_RB>true</WBShift_RB>
+            <HighlightTone type="Std1">true</HighlightTone>
+            <ShadowTone type="Std1">true</ShadowTone>
+            <Color>true</Color>
+            <Sharpness>true</Sharpness>
+            <NoiseReduction type="Std1">true</NoiseReduction>
+            <LensModulationOpt>false</LensModulationOpt>
+            <ColorSpace>true</ColorSpace>
+            <Rating>false</Rating>
+        </PropertyGroup>
+        <PropertyGroup Config="X-T30Config1" >
+            <FileType type="Std1">false</FileType>
+            <ImageSize type="Std2">true</ImageSize>           <!-- [type] is Std1 or Std2 or Ext1 -->
+            <ImageQuality type="Std1">true</ImageQuality>     <!-- [type] is Std1 or Ext1 -->
+            <PreviewImage>true</PreviewImage>
+            <ExposureBias>true</ExposureBias>
+            <ExposureBiasRange>M2P3</ExposureBiasRange>
+            <DynamicRange>true</DynamicRange>
+            <WideDynamicRange>true</WideDynamicRange>
+            <FilmSimulation type="Std2">true</FilmSimulation> <!-- [type] is Std1 or Std2 -->
+            <BlackImageTone>true</BlackImageTone>
+            <GrainEffect type="Std1">true</GrainEffect>
+            <ChromeEffect>true</ChromeEffect>
+            <SmoothSkinEffect>false</SmoothSkinEffect>
+            <WhiteBalance type="Std1">true</WhiteBalance>     <!-- [type] is Std1 only -->
+            <WBColorTemp type="Std1">true</WBColorTemp>       <!-- [type] is Std1 only -->
+            <WBShift_RB>true</WBShift_RB>
+            <HighlightTone type="Std1">true</HighlightTone>
+            <ShadowTone type="Std1">true</ShadowTone>
+            <Color>true</Color>
+            <Sharpness>true</Sharpness>
+            <NoiseReduction type="Std1">true</NoiseReduction>
+            <LensModulationOpt>true</LensModulationOpt>
+            <ColorSpace>true</ColorSpace>
+            <Rating>false</Rating>
+        </PropertyGroup>
+        <PropertyGroup Config="X-T20Config1" >
+            <FileType type="Std1">false</FileType>
+            <ImageSize type="Std1">false</ImageSize>          <!-- [type] is Std1 or Std2 or Ext1 -->
+            <ImageQuality type="Std1">false</ImageQuality>    <!-- [type] is Std1 or Ext1 -->
+            <PreviewImage>true</PreviewImage>
+            <ExposureBias>true</ExposureBias>
+            <ExposureBiasRange>M2P3</ExposureBiasRange>
+            <DynamicRange>true</DynamicRange>
+            <WideDynamicRange>false</WideDynamicRange>
+            <FilmSimulation type="Std1">true</FilmSimulation> <!-- [type] is Std1 or Std2 -->
+            <BlackImageTone>false</BlackImageTone>
+            <GrainEffect type="Std1">true</GrainEffect>
+            <ChromeEffect>false</ChromeEffect>
+            <SmoothSkinEffect>false</SmoothSkinEffect>
+            <WhiteBalance type="Std1">true</WhiteBalance>     <!-- [type] is Std1 only -->
+            <WBColorTemp type="Std1">true</WBColorTemp>       <!-- [type] is Std1 only -->
+            <WBShift_RB>true</WBShift_RB>
+            <HighlightTone type="Std1">true</HighlightTone>
+            <ShadowTone type="Std1">true</ShadowTone>
+            <Color>true</Color>
+            <Sharpness>true</Sharpness>
+            <NoiseReduction type="Std1">true</NoiseReduction>
+            <LensModulationOpt>true</LensModulationOpt>
+            <ColorSpace>true</ColorSpace>
+            <Rating>false</Rating>
+        </PropertyGroup>
+        <PropertyGroup Config="X-E3Config1" >
+            <FileType type="Std1">false</FileType>
+            <ImageSize type="Std1">false</ImageSize>          <!-- [type] is Std1 or Std2 or Ext1 -->
+            <ImageQuality type="Std1">false</ImageQuality>    <!-- [type] is Std1 or Ext1 -->
+            <PreviewImage>true</PreviewImage>
+            <ExposureBias>true</ExposureBias>
+            <ExposureBiasRange>M2P3</ExposureBiasRange>
+            <DynamicRange>true</DynamicRange>
+            <WideDynamicRange>false</WideDynamicRange>
+            <FilmSimulation type="Std1">true</FilmSimulation> <!-- [type] is Std1 or Std2 -->
+            <BlackImageTone>false</BlackImageTone>
+            <GrainEffect type="Std1">true</GrainEffect>
+            <ChromeEffect>false</ChromeEffect>
+            <SmoothSkinEffect>false</SmoothSkinEffect>
+            <WhiteBalance type="Std1">true</WhiteBalance>     <!-- [type] is Std1 only -->
+            <WBColorTemp type="Std1">true</WBColorTemp>       <!-- [type] is Std1 only -->
+            <WBShift_RB>true</WBShift_RB>
+            <HighlightTone type="Std1">true</HighlightTone>
+            <ShadowTone type="Std1">true</ShadowTone>
+            <Color>true</Color>
+            <Sharpness>true</Sharpness>
+            <NoiseReduction type="Std1">true</NoiseReduction>
+            <LensModulationOpt>true</LensModulationOpt>
+            <ColorSpace>true</ColorSpace>
+            <Rating>false</Rating>
+        </PropertyGroup>
+        <PropertyGroup Config="X-T4Config1" >
+            <FileType type="Ext1">true</FileType>
+            <ImageSize type="Std2">true</ImageSize>           <!-- [type] is Std1 or Std2 or Ext1 -->
+            <ImageQuality type="Std1">true</ImageQuality>    <!-- [type] is Std1 or Ext1 -->
+            <PreviewImage>true</PreviewImage>
+            <ExposureBias>true</ExposureBias>
+            <ExposureBiasRange>M2P3</ExposureBiasRange>
+            <DynamicRange>true</DynamicRange>
+            <WideDynamicRange>true</WideDynamicRange>
+            <FilmSimulation type="Std4">true</FilmSimulation> <!-- [type] is Std1 or Std2 or Std3 or Std4 -->
+            <BlackImageTone>false</BlackImageTone>
+            <MonochromaticColor>true</MonochromaticColor>
+            <GrainEffect type="Std2">true</GrainEffect>
+            <ChromeEffect>true</ChromeEffect>
+            <ColorChromeBlue>true</ColorChromeBlue>
+            <SmoothSkinEffect>false</SmoothSkinEffect>
+            <WhiteBalance type="Std2">true</WhiteBalance>     <!-- [type] is Std1 or Std2 -->
+            <WBColorTemp type="Std2">true</WBColorTemp>       <!-- [type] is Std1 or Std2 -->
+            <WBShift_RB>true</WBShift_RB>
+            <HighlightTone type="Std2">true</HighlightTone>   <!-- [type] is Std1 or Std2 -->
+            <ShadowTone type="Std2">true</ShadowTone>         <!-- [type] is Std1 or Std2 -->
+            <Color>true</Color>
+            <Sharpness>true</Sharpness>
+            <NoiseReduction type="Std2">true</NoiseReduction> <!-- [type] is Std1 or Std2 -->
+            <Clarity>true</Clarity>
+            <LensModulationOpt>true</LensModulationOpt>
+            <ColorSpace>true</ColorSpace>
+            <Rating>false</Rating>
+            <CustomSetting>true</CustomSetting>
+            <HDR>true</HDR>
+        </PropertyGroup>
+        <PropertyGroup Config="X-S10Config1" >
+            <FileType type="Std1">false</FileType>
+            <ImageSize type="Std2">true</ImageSize>           <!-- [type] is Std1 or Std2 or Ext1 -->
+            <ImageQuality type="Std1">true</ImageQuality>    <!-- [type] is Std1 or Ext1 -->
+            <PreviewImage>true</PreviewImage>
+            <ExposureBias>true</ExposureBias>
+            <ExposureBiasRange>M2P3</ExposureBiasRange>
+            <DynamicRange>true</DynamicRange>
+            <WideDynamicRange>true</WideDynamicRange>
+            <FilmSimulation type="Std4">true</FilmSimulation> <!-- [type] is Std1 or Std2 or Std3 or Std4 -->
+            <BlackImageTone>false</BlackImageTone>
+            <MonochromaticColor>true</MonochromaticColor>
+            <GrainEffect type="Std2">true</GrainEffect>
+            <ChromeEffect>true</ChromeEffect>
+            <ColorChromeBlue>true</ColorChromeBlue>
+            <SmoothSkinEffect>false</SmoothSkinEffect>
+            <WhiteBalance type="Std2">true</WhiteBalance>     <!-- [type] is Std1 or Std2 -->
+            <WBColorTemp type="Std2">true</WBColorTemp>       <!-- [type] is Std1 or Std2 -->
+            <WBShift_RB>true</WBShift_RB>
+            <HighlightTone type="Std2">true</HighlightTone>   <!-- [type] is Std1 or Std2 -->
+            <ShadowTone type="Std2">true</ShadowTone>         <!-- [type] is Std1 or Std2 -->
+            <Color>true</Color>
+            <Sharpness>true</Sharpness>
+            <NoiseReduction type="Std2">true</NoiseReduction> <!-- [type] is Std1 or Std2 -->
+            <Clarity>true</Clarity>
+            <LensModulationOpt>true</LensModulationOpt>
+            <ColorSpace>true</ColorSpace>
+            <Rating>false</Rating>
+            <CustomSetting>true</CustomSetting>
+            <HDR>true</HDR>
+        </PropertyGroup>
+        <PropertyGroup Config="X-H2SConfig1" >
+            <FileType type="Ext2">true</FileType>
+            <ImageSize type="Std2">true</ImageSize>           <!-- [type] is Std1 or Std2 or Ext1 -->
+            <ImageQuality type="Std1">true</ImageQuality>    <!-- [type] is Std1 or Ext1 -->
+            <PreviewImage>true</PreviewImage>
+            <ExposureBias>true</ExposureBias>
+            <ExposureBiasRange>M2P3</ExposureBiasRange>
+            <DynamicRange>true</DynamicRange>
+            <WideDynamicRange>true</WideDynamicRange>
+            <FilmSimulation type="Std5">true</FilmSimulation> <!-- [type] is Std1 or Std2 or Std3 or Std4 or Std5 -->
+            <BlackImageTone>false</BlackImageTone>
+            <MonochromaticColor>true</MonochromaticColor>
+            <GrainEffect type="Std2">true</GrainEffect>
+            <ChromeEffect>true</ChromeEffect>
+            <ColorChromeBlue>true</ColorChromeBlue>
+            <SmoothSkinEffect>false</SmoothSkinEffect>
+            <WhiteBalance type="Std2">true</WhiteBalance>     <!-- [type] is Std1 or Std2 -->
+            <WBColorTemp type="Std2">true</WBColorTemp>       <!-- [type] is Std1 or Std2 -->
+            <WBShift_RB>true</WBShift_RB>
+            <HighlightTone type="Std2">true</HighlightTone>   <!-- [type] is Std1 or Std2 -->
+            <ShadowTone type="Std2">true</ShadowTone>         <!-- [type] is Std1 or Std2 -->
+            <Color>true</Color>
+            <Sharpness>true</Sharpness>
+            <NoiseReduction type="Std2">true</NoiseReduction> <!-- [type] is Std1 or Std2 -->
+            <Clarity>true</Clarity>
+            <LensModulationOpt>true</LensModulationOpt>
+            <ColorSpace>true</ColorSpace>
+            <Rating>false</Rating>
+            <CustomSetting>true</CustomSetting>
+            <HDR>true</HDR>
+        </PropertyGroup>
+        <PropertyGroup Config="X-H2SConfig2" >
+            <FileType type="Ext2">true</FileType>
+            <ImageSize type="Std2">true</ImageSize>           <!-- [type] is Std1 or Std2 or Ext1 -->
+            <ImageQuality type="Std1">true</ImageQuality>    <!-- [type] is Std1 or Ext1 -->
+            <PreviewImage>true</PreviewImage>
+            <ExposureBias>true</ExposureBias>
+            <ExposureBiasRange>M2P3</ExposureBiasRange>
+            <DynamicRange>true</DynamicRange>
+            <WideDynamicRange>true</WideDynamicRange>
+            <FilmSimulation type="Std6">true</FilmSimulation> <!-- [type] is Std1 or Std2 or Std3 or Std4 or Std5 or Std6 -->
+            <BlackImageTone>false</BlackImageTone>
+            <MonochromaticColor>true</MonochromaticColor>
+            <GrainEffect type="Std2">true</GrainEffect>
+            <ChromeEffect>true</ChromeEffect>
+            <ColorChromeBlue>true</ColorChromeBlue>
+            <SmoothSkinEffect>false</SmoothSkinEffect>
+            <WhiteBalance type="Std2">true</WhiteBalance>     <!-- [type] is Std1 or Std2 -->
+            <WBColorTemp type="Std2">true</WBColorTemp>       <!-- [type] is Std1 or Std2 -->
+            <WBShift_RB>true</WBShift_RB>
+            <HighlightTone type="Std2">true</HighlightTone>   <!-- [type] is Std1 or Std2 -->
+            <ShadowTone type="Std2">true</ShadowTone>         <!-- [type] is Std1 or Std2 -->
+            <Color>true</Color>
+            <Sharpness>true</Sharpness>
+            <NoiseReduction type="Std2">true</NoiseReduction> <!-- [type] is Std1 or Std2 -->
+            <Clarity>true</Clarity>
+            <LensModulationOpt>true</LensModulationOpt>
+            <ColorSpace>true</ColorSpace>
+            <Rating>false</Rating>
+            <CustomSetting>true</CustomSetting>
+            <HDR>true</HDR>
+        </PropertyGroup>
+        <PropertyGroup Config="X-H2Config1" >
+            <FileType type="Ext2">true</FileType>
+            <ImageSize type="Std3">true</ImageSize>           <!-- [type] is Std1 or Std2 or Ext1 -->
+            <ImageQuality type="Std1">true</ImageQuality>    <!-- [type] is Std1 or Ext1 -->
+            <PreviewImage>true</PreviewImage>
+            <ExposureBias>true</ExposureBias>
+            <ExposureBiasRange>M2P3</ExposureBiasRange>
+            <DynamicRange>true</DynamicRange>
+            <WideDynamicRange>true</WideDynamicRange>
+            <FilmSimulation type="Std5">true</FilmSimulation> <!-- [type] is Std1 or Std2 or Std3 or Std4 or Std5 -->
+            <BlackImageTone>false</BlackImageTone>
+            <MonochromaticColor>true</MonochromaticColor>
+            <GrainEffect type="Std2">true</GrainEffect>
+            <ChromeEffect>true</ChromeEffect>
+            <ColorChromeBlue>true</ColorChromeBlue>
+            <SmoothSkinEffect>true</SmoothSkinEffect>
+            <WhiteBalance type="Std2">true</WhiteBalance>     <!-- [type] is Std1 or Std2 -->
+            <WBColorTemp type="Std2">true</WBColorTemp>       <!-- [type] is Std1 or Std2 -->
+            <WBShift_RB>true</WBShift_RB>
+            <HighlightTone type="Std2">true</HighlightTone>   <!-- [type] is Std1 or Std2 -->
+            <ShadowTone type="Std2">true</ShadowTone>         <!-- [type] is Std1 or Std2 -->
+            <Color>true</Color>
+            <Sharpness>true</Sharpness>
+            <NoiseReduction type="Std2">true</NoiseReduction> <!-- [type] is Std1 or Std2 -->
+            <Clarity>true</Clarity>
+            <LensModulationOpt>true</LensModulationOpt>
+            <ColorSpace>true</ColorSpace>
+            <Rating>false</Rating>
+            <CustomSetting>true</CustomSetting>
+            <HDR>true</HDR>
+            <DigitalTeleConv type="Std2">true</DigitalTeleConv>
+        </PropertyGroup>
+        <PropertyGroup Config="X-H2Config2" >
+            <FileType type="Ext2">true</FileType>
+            <ImageSize type="Std3">true</ImageSize>           <!-- [type] is Std1 or Std2 or Ext1 -->
+            <ImageQuality type="Std1">true</ImageQuality>    <!-- [type] is Std1 or Ext1 -->
+            <PreviewImage>true</PreviewImage>
+            <ExposureBias>true</ExposureBias>
+            <ExposureBiasRange>M2P3</ExposureBiasRange>
+            <DynamicRange>true</DynamicRange>
+            <WideDynamicRange>true</WideDynamicRange>
+            <FilmSimulation type="Std6">true</FilmSimulation> <!-- [type] is Std1 or Std2 or Std3 or Std4 or Std5 or Std6 -->
+            <BlackImageTone>false</BlackImageTone>
+            <MonochromaticColor>true</MonochromaticColor>
+            <GrainEffect type="Std2">true</GrainEffect>
+            <ChromeEffect>true</ChromeEffect>
+            <ColorChromeBlue>true</ColorChromeBlue>
+            <SmoothSkinEffect>true</SmoothSkinEffect>
+            <WhiteBalance type="Std2">true</WhiteBalance>     <!-- [type] is Std1 or Std2 -->
+            <WBColorTemp type="Std2">true</WBColorTemp>       <!-- [type] is Std1 or Std2 -->
+            <WBShift_RB>true</WBShift_RB>
+            <HighlightTone type="Std2">true</HighlightTone>   <!-- [type] is Std1 or Std2 -->
+            <ShadowTone type="Std2">true</ShadowTone>         <!-- [type] is Std1 or Std2 -->
+            <Color>true</Color>
+            <Sharpness>true</Sharpness>
+            <NoiseReduction type="Std2">true</NoiseReduction> <!-- [type] is Std1 or Std2 -->
+            <Clarity>true</Clarity>
+            <LensModulationOpt>true</LensModulationOpt>
+            <ColorSpace>true</ColorSpace>
+            <Rating>false</Rating>
+            <CustomSetting>true</CustomSetting>
+            <HDR>true</HDR>
+            <DigitalTeleConv type="Std2">true</DigitalTeleConv>
+        </PropertyGroup>
+        <PropertyGroup Config="X-S20Config1" >
+            <FileType type="Ext2">true</FileType>
+            <ImageSize type="Std2">true</ImageSize>           <!-- [type] is Std1 or Std2 or Ext1 -->
+            <ImageQuality type="Std1">true</ImageQuality>    <!-- [type] is Std1 or Ext1 -->
+            <PreviewImage>true</PreviewImage>
+            <ExposureBias>true</ExposureBias>
+            <ExposureBiasRange>M2P3</ExposureBiasRange>
+            <DynamicRange>true</DynamicRange>
+            <WideDynamicRange>true</WideDynamicRange>
+            <FilmSimulation type="Std5">true</FilmSimulation> <!-- [type] is Std1 or Std2 or Std3 or Std4 or Std5 -->
+            <BlackImageTone>false</BlackImageTone>
+            <MonochromaticColor>true</MonochromaticColor>
+            <GrainEffect type="Std2">true</GrainEffect>
+            <ChromeEffect>true</ChromeEffect>
+            <ColorChromeBlue>true</ColorChromeBlue>
+            <SmoothSkinEffect>false</SmoothSkinEffect>
+            <WhiteBalance type="Std2">true</WhiteBalance>     <!-- [type] is Std1 or Std2 -->
+            <WBColorTemp type="Std2">true</WBColorTemp>       <!-- [type] is Std1 or Std2 -->
+            <WBShift_RB>true</WBShift_RB>
+            <HighlightTone type="Std2">true</HighlightTone>   <!-- [type] is Std1 or Std2 -->
+            <ShadowTone type="Std2">true</ShadowTone>         <!-- [type] is Std1 or Std2 -->
+            <Color>true</Color>
+            <Sharpness>true</Sharpness>
+            <NoiseReduction type="Std2">true</NoiseReduction> <!-- [type] is Std1 or Std2 -->
+            <Clarity>true</Clarity>
+            <LensModulationOpt>true</LensModulationOpt>
+            <ColorSpace>true</ColorSpace>
+            <Rating>false</Rating>
+            <CustomSetting>true</CustomSetting>
+            <HDR>true</HDR>
+        </PropertyGroup>
+        <PropertyGroup Config="X-S20Config2" >
+            <FileType type="Ext2">true</FileType>
+            <ImageSize type="Std2">true</ImageSize>           <!-- [type] is Std1 or Std2 or Ext1 -->
+            <ImageQuality type="Std1">true</ImageQuality>    <!-- [type] is Std1 or Ext1 -->
+            <PreviewImage>true</PreviewImage>
+            <ExposureBias>true</ExposureBias>
+            <ExposureBiasRange>M2P3</ExposureBiasRange>
+            <DynamicRange>true</DynamicRange>
+            <WideDynamicRange>true</WideDynamicRange>
+            <FilmSimulation type="Std6">true</FilmSimulation> <!-- [type] is Std1 or Std2 or Std3 or Std4 or Std5 or Std6 -->
+            <BlackImageTone>false</BlackImageTone>
+            <MonochromaticColor>true</MonochromaticColor>
+            <GrainEffect type="Std2">true</GrainEffect>
+            <ChromeEffect>true</ChromeEffect>
+            <ColorChromeBlue>true</ColorChromeBlue>
+            <SmoothSkinEffect>false</SmoothSkinEffect>
+            <WhiteBalance type="Std2">true</WhiteBalance>     <!-- [type] is Std1 or Std2 -->
+            <WBColorTemp type="Std2">true</WBColorTemp>       <!-- [type] is Std1 or Std2 -->
+            <WBShift_RB>true</WBShift_RB>
+            <HighlightTone type="Std2">true</HighlightTone>   <!-- [type] is Std1 or Std2 -->
+            <ShadowTone type="Std2">true</ShadowTone>         <!-- [type] is Std1 or Std2 -->
+            <Color>true</Color>
+            <Sharpness>true</Sharpness>
+            <NoiseReduction type="Std2">true</NoiseReduction> <!-- [type] is Std1 or Std2 -->
+            <Clarity>true</Clarity>
+            <LensModulationOpt>true</LensModulationOpt>
+            <ColorSpace>true</ColorSpace>
+            <Rating>false</Rating>
+            <CustomSetting>true</CustomSetting>
+            <HDR>true</HDR>
+        </PropertyGroup>
+        <PropertyGroup Config="X-T5Config1" >
+            <FileType type="Ext2">true</FileType>
+            <ImageSize type="Std3">true</ImageSize>           <!-- [type] is Std1 or Std2 or Ext1 -->
+            <ImageQuality type="Std1">true</ImageQuality>    <!-- [type] is Std1 or Ext1 -->
+            <PreviewImage>true</PreviewImage>
+            <ExposureBias>true</ExposureBias>
+            <ExposureBiasRange>M2P3</ExposureBiasRange>
+            <DynamicRange>true</DynamicRange>
+            <WideDynamicRange>true</WideDynamicRange>
+            <FilmSimulation type="Std5">true</FilmSimulation> <!-- [type] is Std1 or Std2 or Std3 or Std4 or Std5 -->
+            <BlackImageTone>false</BlackImageTone>
+            <MonochromaticColor>true</MonochromaticColor>
+            <GrainEffect type="Std2">true</GrainEffect>
+            <ChromeEffect>true</ChromeEffect>
+            <ColorChromeBlue>true</ColorChromeBlue>
+            <SmoothSkinEffect>true</SmoothSkinEffect>
+            <WhiteBalance type="Std2">true</WhiteBalance>     <!-- [type] is Std1 or Std2 -->
+            <WBColorTemp type="Std2">true</WBColorTemp>       <!-- [type] is Std1 or Std2 -->
+            <WBShift_RB>true</WBShift_RB>
+            <HighlightTone type="Std2">true</HighlightTone>   <!-- [type] is Std1 or Std2 -->
+            <ShadowTone type="Std2">true</ShadowTone>         <!-- [type] is Std1 or Std2 -->
+            <Color>true</Color>
+            <Sharpness>true</Sharpness>
+            <NoiseReduction type="Std2">true</NoiseReduction> <!-- [type] is Std1 or Std2 -->
+            <Clarity>true</Clarity>
+            <LensModulationOpt>true</LensModulationOpt>
+            <ColorSpace>true</ColorSpace>
+            <Rating>false</Rating>
+            <CustomSetting>true</CustomSetting>
+            <HDR>true</HDR>
+            <DigitalTeleConv type="Std2">true</DigitalTeleConv>
+        </PropertyGroup>
+        <PropertyGroup Config="X-T5Config2" >
+            <FileType type="Ext2">true</FileType>
+            <ImageSize type="Std3">true</ImageSize>           <!-- [type] is Std1 or Std2 or Ext1 -->
+            <ImageQuality type="Std1">true</ImageQuality>    <!-- [type] is Std1 or Ext1 -->
+            <PreviewImage>true</PreviewImage>
+            <ExposureBias>true</ExposureBias>
+            <ExposureBiasRange>M2P3</ExposureBiasRange>
+            <DynamicRange>true</DynamicRange>
+            <WideDynamicRange>true</WideDynamicRange>
+            <FilmSimulation type="Std6">true</FilmSimulation> <!-- [type] is Std1 or Std2 or Std3 or Std4 or Std5 or Std6 -->
+            <BlackImageTone>false</BlackImageTone>
+            <MonochromaticColor>true</MonochromaticColor>
+            <GrainEffect type="Std2">true</GrainEffect>
+            <ChromeEffect>true</ChromeEffect>
+            <ColorChromeBlue>true</ColorChromeBlue>
+            <SmoothSkinEffect>true</SmoothSkinEffect>
+            <WhiteBalance type="Std2">true</WhiteBalance>     <!-- [type] is Std1 or Std2 -->
+            <WBColorTemp type="Std2">true</WBColorTemp>       <!-- [type] is Std1 or Std2 -->
+            <WBShift_RB>true</WBShift_RB>
+            <HighlightTone type="Std2">true</HighlightTone>   <!-- [type] is Std1 or Std2 -->
+            <ShadowTone type="Std2">true</ShadowTone>         <!-- [type] is Std1 or Std2 -->
+            <Color>true</Color>
+            <Sharpness>true</Sharpness>
+            <NoiseReduction type="Std2">true</NoiseReduction> <!-- [type] is Std1 or Std2 -->
+            <Clarity>true</Clarity>
+            <LensModulationOpt>true</LensModulationOpt>
+            <ColorSpace>true</ColorSpace>
+            <Rating>false</Rating>
+            <CustomSetting>true</CustomSetting>
+            <HDR>true</HDR>
+            <DigitalTeleConv type="Std2">true</DigitalTeleConv>
+        </PropertyGroup>
+        <PropertyGroup Config="Gfx100SConfig1" >
+            <FileType type="Ext1">true</FileType>
+            <ImageSize type="Ext2">true</ImageSize>           <!-- [type] is Std1 or Std2 or Ext1 -->
+            <ImageQuality type="Ext1">true</ImageQuality>     <!-- [type] is Std1 or Ext1 -->
+            <PreviewImage>true</PreviewImage>
+            <ExposureBias>true</ExposureBias>
+            <ExposureBiasRange>M2P3</ExposureBiasRange>
+            <DynamicRange>true</DynamicRange>
+            <WideDynamicRange>true</WideDynamicRange>
+            <FilmSimulation type="Std5">true</FilmSimulation> <!-- [type] is Std1 or Std2 or Std3 or Std4 or Std5 -->
+            <BlackImageTone>false</BlackImageTone>
+            <MonochromaticColor>true</MonochromaticColor>
+            <GrainEffect type="Std2">true</GrainEffect>
+            <ChromeEffect>true</ChromeEffect>
+            <ColorChromeBlue>true</ColorChromeBlue>
+            <SmoothSkinEffect>true</SmoothSkinEffect>
+            <WhiteBalance type="Std2">true</WhiteBalance>     <!-- [type] is Std1 or Std2 -->
+            <WBColorTemp type="Std2">true</WBColorTemp>       <!-- [type] is Std1 or Std2 -->
+            <WBShift_RB>true</WBShift_RB>
+            <HighlightTone type="Std2">true</HighlightTone>   <!-- [type] is Std1 or Std2 -->
+            <ShadowTone type="Std2">true</ShadowTone>         <!-- [type] is Std1 or Std2 -->
+            <Color>true</Color>
+            <Sharpness>true</Sharpness>
+            <NoiseReduction type="Std2">true</NoiseReduction> <!-- [type] is Std1 or Std2 -->
+            <Clarity>true</Clarity>
+            <LensModulationOpt>true</LensModulationOpt>
+            <ColorSpace>true</ColorSpace>
+            <Rating>false</Rating>
+            <CustomSetting>true</CustomSetting>
+            <HDR>false</HDR>
+        </PropertyGroup>
+        <PropertyGroup Config="Gfx50SIIConfig1" >
+            <FileType type="Ext1">true</FileType>
+            <ImageSize type="Ext1">true</ImageSize>           <!-- [type] is Std1 or Std2 or Ext1 -->
+            <ImageQuality type="Ext1">true</ImageQuality>     <!-- [type] is Std1 or Ext1 -->
+            <PreviewImage>true</PreviewImage>
+            <ExposureBias>true</ExposureBias>
+            <ExposureBiasRange>M2P3</ExposureBiasRange>
+            <DynamicRange>true</DynamicRange>
+            <WideDynamicRange>true</WideDynamicRange>
+            <FilmSimulation type="Std5">true</FilmSimulation> <!-- [type] is Std1 or Std2 or Std3 or Std4 or Std5 -->
+            <BlackImageTone>false</BlackImageTone>
+            <MonochromaticColor>true</MonochromaticColor>
+            <GrainEffect type="Std2">true</GrainEffect>
+            <ChromeEffect>true</ChromeEffect>
+            <ColorChromeBlue>true</ColorChromeBlue>
+            <SmoothSkinEffect>true</SmoothSkinEffect>
+            <WhiteBalance type="Std2">true</WhiteBalance>     <!-- [type] is Std1 or Std2 -->
+            <WBColorTemp type="Std2">true</WBColorTemp>       <!-- [type] is Std1 or Std2 -->
+            <WBShift_RB>true</WBShift_RB>
+            <HighlightTone type="Std2">true</HighlightTone>   <!-- [type] is Std1 or Std2 -->
+            <ShadowTone type="Std2">true</ShadowTone>         <!-- [type] is Std1 or Std2 -->
+            <Color>true</Color>
+            <Sharpness>true</Sharpness>
+            <NoiseReduction type="Std2">true</NoiseReduction> <!-- [type] is Std1 or Std2 -->
+            <Clarity>true</Clarity>
+            <LensModulationOpt>true</LensModulationOpt>
+            <ColorSpace>true</ColorSpace>
+            <Rating>false</Rating>
+            <CustomSetting>true</CustomSetting>
+            <HDR>false</HDR>
+        </PropertyGroup>
+        <PropertyGroup Config="Gfx100IIConfig1" >
+            <FileType type="Ext2">true</FileType>
+            <ImageSize type="Ext2">true</ImageSize>           <!-- [type] is Std1 or Std2 or Ext1 -->
+            <ImageQuality type="Ext1">true</ImageQuality>    <!-- [type] is Std1 or Ext1 -->
+            <PreviewImage>true</PreviewImage>
+            <ExposureBias>true</ExposureBias>
+            <ExposureBiasRange>M2P3</ExposureBiasRange>
+            <DynamicRange>true</DynamicRange>
+            <WideDynamicRange>true</WideDynamicRange>
+            <FilmSimulation type="Std6">true</FilmSimulation> <!-- [type] is Std1 or Std2 or Std3 or Std4 or Std5 or Std6 -->
+            <BlackImageTone>false</BlackImageTone>
+            <MonochromaticColor>true</MonochromaticColor>
+            <GrainEffect type="Std2">true</GrainEffect>
+            <ChromeEffect>true</ChromeEffect>
+            <ColorChromeBlue>true</ColorChromeBlue>
+            <SmoothSkinEffect>true</SmoothSkinEffect>
+            <WhiteBalance type="Std2">true</WhiteBalance>     <!-- [type] is Std1 or Std2 -->
+            <WBColorTemp type="Std2">true</WBColorTemp>       <!-- [type] is Std1 or Std2 -->
+            <WBShift_RB>true</WBShift_RB>
+            <HighlightTone type="Std2">true</HighlightTone>   <!-- [type] is Std1 or Std2 -->
+            <ShadowTone type="Std2">true</ShadowTone>         <!-- [type] is Std1 or Std2 -->
+            <Color>true</Color>
+            <Sharpness>true</Sharpness>
+            <NoiseReduction type="Std2">true</NoiseReduction> <!-- [type] is Std1 or Std2 -->
+            <Clarity>true</Clarity>
+            <LensModulationOpt>true</LensModulationOpt>
+            <ColorSpace>true</ColorSpace>
+            <Rating>false</Rating>
+            <CustomSetting>true</CustomSetting>
+            <HDR>false</HDR>
+            <DigitalTeleConv>false</DigitalTeleConv>
+        </PropertyGroup>
+        <PropertyGroup Config="Gfx100SIIConfig1" >
+            <FileType type="Ext2">true</FileType>
+            <ImageSize type="Ext2">true</ImageSize>           <!-- [type] is Std1 or Std2 or Ext1 -->
+            <ImageQuality type="Ext1">true</ImageQuality>    <!-- [type] is Std1 or Ext1 -->
+            <PreviewImage>true</PreviewImage>
+            <ExposureBias>true</ExposureBias>
+            <ExposureBiasRange>M2P3</ExposureBiasRange>
+            <DynamicRange>true</DynamicRange>
+            <WideDynamicRange>true</WideDynamicRange>
+            <FilmSimulation type="Std6">true</FilmSimulation> <!-- [type] is Std1 or Std2 or Std3 or Std4 or Std5 or Std6 -->
+            <BlackImageTone>false</BlackImageTone>
+            <MonochromaticColor>true</MonochromaticColor>
+            <GrainEffect type="Std2">true</GrainEffect>
+            <ChromeEffect>true</ChromeEffect>
+            <ColorChromeBlue>true</ColorChromeBlue>
+            <SmoothSkinEffect>true</SmoothSkinEffect>
+            <WhiteBalance type="Std2">true</WhiteBalance>     <!-- [type] is Std1 or Std2 -->
+            <WBColorTemp type="Std2">true</WBColorTemp>       <!-- [type] is Std1 or Std2 -->
+            <WBShift_RB>true</WBShift_RB>
+            <HighlightTone type="Std2">true</HighlightTone>   <!-- [type] is Std1 or Std2 -->
+            <ShadowTone type="Std2">true</ShadowTone>         <!-- [type] is Std1 or Std2 -->
+            <Color>true</Color>
+            <Sharpness>true</Sharpness>
+            <NoiseReduction type="Std2">true</NoiseReduction> <!-- [type] is Std1 or Std2 -->
+            <Clarity>true</Clarity>
+            <LensModulationOpt>true</LensModulationOpt>
+            <ColorSpace>true</ColorSpace>
+            <Rating>false</Rating>
+            <CustomSetting>true</CustomSetting>
+            <HDR>false</HDR>
+            <DigitalTeleConv>false</DigitalTeleConv>
+        </PropertyGroup>
+        <PropertyGroup Config="Gfx100RFConfig1" >
+            <FileType type="Ext2">true</FileType>
+            <ImageSize type="Ext3">true</ImageSize>           <!-- [type] is Std1 or Std2 or Ext1 -->
+            <ImageQuality type="Ext1">true</ImageQuality>    <!-- [type] is Std1 or Ext1 -->
+            <PreviewImage>true</PreviewImage>
+            <ExposureBias>true</ExposureBias>
+            <ExposureBiasRange>M2P3</ExposureBiasRange>
+            <DynamicRange>true</DynamicRange>
+            <WideDynamicRange>true</WideDynamicRange>
+            <FilmSimulation type="Std6">true</FilmSimulation> <!-- [type] is Std1 or Std2 or Std3 or Std4 or Std5 or Std6 -->
+            <BlackImageTone>false</BlackImageTone>
+            <MonochromaticColor>true</MonochromaticColor>
+            <GrainEffect type="Std2">true</GrainEffect>
+            <ChromeEffect>true</ChromeEffect>
+            <ColorChromeBlue>true</ColorChromeBlue>
+            <SmoothSkinEffect>true</SmoothSkinEffect>
+            <WhiteBalance type="Std2">true</WhiteBalance>     <!-- [type] is Std1 or Std2 -->
+            <WBColorTemp type="Std2">true</WBColorTemp>       <!-- [type] is Std1 or Std2 -->
+            <WBShift_RB>true</WBShift_RB>
+            <HighlightTone type="Std2">true</HighlightTone>   <!-- [type] is Std1 or Std2 -->
+            <ShadowTone type="Std2">true</ShadowTone>         <!-- [type] is Std1 or Std2 -->
+            <Color>true</Color>
+            <Sharpness>true</Sharpness>
+            <NoiseReduction type="Std2">true</NoiseReduction> <!-- [type] is Std1 or Std2 -->
+            <Clarity>true</Clarity>
+            <LensModulationOpt>false</LensModulationOpt>
+            <ColorSpace>true</ColorSpace>
+            <Rating>false</Rating>
+            <CustomSetting type="Std2">true</CustomSetting>
+            <HDR>false</HDR>
+            <DigitalTeleConv type="Std3">true</DigitalTeleConv>
+        </PropertyGroup>
+        <PropertyGroup Config="X-T50Config1" >
+            <FileType type="Ext2">true</FileType>
+            <ImageSize type="Std3">true</ImageSize>           <!-- [type] is Std1 or Std2 or Ext1 -->
+            <ImageQuality type="Std1">true</ImageQuality>    <!-- [type] is Std1 or Ext1 -->
+            <PreviewImage>true</PreviewImage>
+            <ExposureBias>true</ExposureBias>
+            <ExposureBiasRange>M2P3</ExposureBiasRange>
+            <DynamicRange>true</DynamicRange>
+            <WideDynamicRange>true</WideDynamicRange>
+            <FilmSimulation type="Std6">true</FilmSimulation> <!-- [type] is Std1 or Std2 or Std3 or Std4 or Std5 or Std6 -->
+            <BlackImageTone>false</BlackImageTone>
+            <MonochromaticColor>true</MonochromaticColor>
+            <GrainEffect type="Std2">true</GrainEffect>
+            <ChromeEffect>true</ChromeEffect>
+            <ColorChromeBlue>true</ColorChromeBlue>
+            <SmoothSkinEffect>true</SmoothSkinEffect>
+            <WhiteBalance type="Std2">true</WhiteBalance>     <!-- [type] is Std1 or Std2 -->
+            <WBColorTemp type="Std2">true</WBColorTemp>       <!-- [type] is Std1 or Std2 -->
+            <WBShift_RB>true</WBShift_RB>
+            <HighlightTone type="Std2">true</HighlightTone>   <!-- [type] is Std1 or Std2 -->
+            <ShadowTone type="Std2">true</ShadowTone>         <!-- [type] is Std1 or Std2 -->
+            <Color>true</Color>
+            <Sharpness>true</Sharpness>
+            <NoiseReduction type="Std2">true</NoiseReduction> <!-- [type] is Std1 or Std2 -->
+            <Clarity>true</Clarity>
+            <LensModulationOpt>true</LensModulationOpt>
+            <ColorSpace>true</ColorSpace>
+            <Rating>false</Rating>
+            <CustomSetting>true</CustomSetting>
+            <HDR>true</HDR>
+            <DigitalTeleConv type="Std2">true</DigitalTeleConv>
+        </PropertyGroup>
+        <PropertyGroup Config="X100VIConfig1" >
+            <FileType type="Ext2">true</FileType>
+            <ImageSize type="Std3">true</ImageSize>           <!-- [type] is Std1 or Std2 or Ext1 -->
+            <ImageQuality type="Std1">true</ImageQuality>    <!-- [type] is Std1 or Ext1 -->
+            <PreviewImage>true</PreviewImage>
+            <ExposureBias>true</ExposureBias>
+            <ExposureBiasRange>M2P3</ExposureBiasRange>
+            <DynamicRange>true</DynamicRange>
+            <WideDynamicRange>true</WideDynamicRange>
+            <FilmSimulation type="Std6">true</FilmSimulation> <!-- [type] is Std1 or Std2 or Std3 or Std4 or Std5 or Std6 -->
+            <BlackImageTone>false</BlackImageTone>
+            <MonochromaticColor>true</MonochromaticColor>
+            <GrainEffect type="Std2">true</GrainEffect>
+            <ChromeEffect>true</ChromeEffect>
+            <ColorChromeBlue>true</ColorChromeBlue>
+            <SmoothSkinEffect>true</SmoothSkinEffect>
+            <WhiteBalance type="Std2">true</WhiteBalance>     <!-- [type] is Std1 or Std2 -->
+            <WBColorTemp type="Std2">true</WBColorTemp>       <!-- [type] is Std1 or Std2 -->
+            <WBShift_RB>true</WBShift_RB>
+            <HighlightTone type="Std2">true</HighlightTone>   <!-- [type] is Std1 or Std2 -->
+            <ShadowTone type="Std2">true</ShadowTone>         <!-- [type] is Std1 or Std2 -->
+            <Color>true</Color>
+            <Sharpness>true</Sharpness>
+            <NoiseReduction type="Std2">true</NoiseReduction> <!-- [type] is Std1 or Std2 -->
+            <Clarity>true</Clarity>
+            <LensModulationOpt>false</LensModulationOpt>
+            <ColorSpace>true</ColorSpace>
+            <Rating>false</Rating>
+            <CustomSetting>true</CustomSetting>
+            <HDR>true</HDR>
+            <DigitalTeleConv type="Std2">true</DigitalTeleConv>
+        </PropertyGroup>
+        <PropertyGroup Config="X-M5Config1" >
+            <FileType type="Ext2">true</FileType>
+            <ImageSize type="Std2">true</ImageSize>           <!-- [type] is Std1 or Std2 or Ext1 -->
+            <ImageQuality type="Std1">true</ImageQuality>    <!-- [type] is Std1 or Ext1 -->
+            <PreviewImage>true</PreviewImage>
+            <ExposureBias>true</ExposureBias>
+            <ExposureBiasRange>M2P3</ExposureBiasRange>
+            <DynamicRange>true</DynamicRange>
+            <WideDynamicRange>true</WideDynamicRange>
+            <FilmSimulation type="Std6">true</FilmSimulation> <!-- [type] is Std1 or Std2 or Std3 or Std4 or Std5 or Std6 -->
+            <BlackImageTone>false</BlackImageTone>
+            <MonochromaticColor>true</MonochromaticColor>
+            <GrainEffect type="Std2">true</GrainEffect>
+            <ChromeEffect>true</ChromeEffect>
+            <ColorChromeBlue>true</ColorChromeBlue>
+            <SmoothSkinEffect>false</SmoothSkinEffect>
+            <WhiteBalance type="Std2">true</WhiteBalance>     <!-- [type] is Std1 or Std2 -->
+            <WBColorTemp type="Std2">true</WBColorTemp>       <!-- [type] is Std1 or Std2 -->
+            <WBShift_RB>true</WBShift_RB>
+            <HighlightTone type="Std2">true</HighlightTone>   <!-- [type] is Std1 or Std2 -->
+            <ShadowTone type="Std2">true</ShadowTone>         <!-- [type] is Std1 or Std2 -->
+            <Color>true</Color>
+            <Sharpness>true</Sharpness>
+            <NoiseReduction type="Std2">true</NoiseReduction> <!-- [type] is Std1 or Std2 -->
+            <Clarity>true</Clarity>
+            <LensModulationOpt>true</LensModulationOpt>
+            <ColorSpace>true</ColorSpace>
+            <Rating>false</Rating>
+            <CustomSetting>true</CustomSetting>
+            <HDR>true</HDR>
+            <PortraitEnhancer>true</PortraitEnhancer>
+        </PropertyGroup>
+        <PropertyGroup Config="X-E5Config1" >
+            <FileType type="Ext2">true</FileType>
+            <ImageSize type="Std3">true</ImageSize>           <!-- [type] is Std1 or Std2 or Ext1 -->
+            <ImageQuality type="Std1">true</ImageQuality>    <!-- [type] is Std1 or Ext1 -->
+            <PreviewImage>true</PreviewImage>
+            <ExposureBias>true</ExposureBias>
+            <ExposureBiasRange>M2P3</ExposureBiasRange>
+            <DynamicRange>true</DynamicRange>
+            <WideDynamicRange>true</WideDynamicRange>
+            <FilmSimulation type="Std6">true</FilmSimulation> <!-- [type] is Std1 or Std2 or Std3 or Std4 or Std5 or Std6 -->
+            <BlackImageTone>false</BlackImageTone>
+            <MonochromaticColor>true</MonochromaticColor>
+            <GrainEffect type="Std2">true</GrainEffect>
+            <ChromeEffect>true</ChromeEffect>
+            <ColorChromeBlue>true</ColorChromeBlue>
+            <SmoothSkinEffect>true</SmoothSkinEffect>
+            <WhiteBalance type="Std2">true</WhiteBalance>     <!-- [type] is Std1 or Std2 -->
+            <WBColorTemp type="Std2">true</WBColorTemp>       <!-- [type] is Std1 or Std2 -->
+            <WBShift_RB>true</WBShift_RB>
+            <HighlightTone type="Std2">true</HighlightTone>   <!-- [type] is Std1 or Std2 -->
+            <ShadowTone type="Std2">true</ShadowTone>         <!-- [type] is Std1 or Std2 -->
+            <Color>true</Color>
+            <Sharpness>true</Sharpness>
+            <NoiseReduction type="Std2">true</NoiseReduction> <!-- [type] is Std1 or Std2 -->
+            <Clarity>true</Clarity>
+            <LensModulationOpt>true</LensModulationOpt>
+            <ColorSpace>true</ColorSpace>
+            <Rating>false</Rating>
+            <CustomSetting>true</CustomSetting>
+            <HDR>true</HDR>
+            <DigitalTeleConv type="Std2">true</DigitalTeleConv>
+        </PropertyGroup>
+        <PropertyGroup Config="X-T30IIIConfig1" >
+            <FileType type="Ext2">true</FileType>
+            <ImageSize type="Std4">true</ImageSize>           <!-- [type] is Std1 or Std2 or Ext1 -->
+            <ImageQuality type="Std1">true</ImageQuality>    <!-- [type] is Std1 or Ext1 -->
+            <PreviewImage>true</PreviewImage>
+            <ExposureBias>true</ExposureBias>
+            <ExposureBiasRange>M2P3</ExposureBiasRange>
+            <DynamicRange>true</DynamicRange>
+            <WideDynamicRange>true</WideDynamicRange>
+            <FilmSimulation type="Std6">true</FilmSimulation> <!-- [type] is Std1 or Std2 or Std3 or Std4 or Std5 or Std6 -->
+            <BlackImageTone>false</BlackImageTone>
+            <MonochromaticColor>true</MonochromaticColor>
+            <GrainEffect type="Std2">true</GrainEffect>
+            <ChromeEffect>true</ChromeEffect>
+            <ColorChromeBlue>true</ColorChromeBlue>
+            <SmoothSkinEffect>false</SmoothSkinEffect>
+            <WhiteBalance type="Std2">true</WhiteBalance>     <!-- [type] is Std1 or Std2 -->
+            <WBColorTemp type="Std2">true</WBColorTemp>       <!-- [type] is Std1 or Std2 -->
+            <WBShift_RB>true</WBShift_RB>
+            <HighlightTone type="Std2">true</HighlightTone>   <!-- [type] is Std1 or Std2 -->
+            <ShadowTone type="Std2">true</ShadowTone>         <!-- [type] is Std1 or Std2 -->
+            <Color>true</Color>
+            <Sharpness>true</Sharpness>
+            <NoiseReduction type="Std2">true</NoiseReduction> <!-- [type] is Std1 or Std2 -->
+            <Clarity>true</Clarity>
+            <LensModulationOpt>true</LensModulationOpt>
+            <ColorSpace>true</ColorSpace>
+            <Rating>false</Rating>
+            <CustomSetting>true</CustomSetting>
+            <HDR>true</HDR>
+            <PortraitEnhancer>true</PortraitEnhancer>
+        </PropertyGroup>
+    </PropertyGroups>
+</ConversionCaps>

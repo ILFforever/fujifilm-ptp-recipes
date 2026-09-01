@@ -25,16 +25,33 @@ until tested.
 
 ## Start Here
 
+Protocol documentation
+
 | Document | Purpose |
 |---|---|
+| [Protocol status](docs/protocol-status.md) | **Read first.** What is stable, what is work in progress, and what will break outside X-Trans V. |
 | [Protocol](docs/protocol.md) | Full USB/PTP protocol flow, packet format, session handling, read/write traces. |
 | [Properties](docs/properties.md) | Complete known recipe property table and value encodings. |
+| [Current shooting state (C0)](docs/current-shooting-state.md) | Applying a recipe to the camera's current shooting state instead of a C1-C7 slot. The live state has its own property codes; there is no slot `0`. **X-Trans V only so far — see caveat below.** |
 | [EXIF MakerNote](docs/exif-makernote.md) | Maps Fujifilm MakerNote EXIF tags to recipe parameters for JPEG import. |
 | [Name rules](docs/name-rules.md) | Preset-name length, allowed characters, normalization, and gotchas. |
 | [Implementation notes](docs/implementation-notes.md) | Practical guidance for building a reader/writer. |
 | [Tested bodies](docs/tested-bodies.md) | Body/firmware compatibility matrix. |
 | [Testing checklist](docs/testing-checklist.md) | Step-by-step process for testing a new body or firmware. |
 | [Python reference snippets](examples/python/ptp_recipe_reference.py) | Constants, encoders, and write/read pseudocode. |
+
+> **Current shooting state (C0) is confirmed on X-Trans V only** and should be expected to fail on
+> other generations. It is unfinished reverse engineering, not a settled protocol — see
+> [protocol status](docs/protocol-status.md) for exactly what is confirmed, what is not, and why.
+
+### Reverse engineering
+
+[`docs/reverse-engineering/`](docs/reverse-engineering/README.md) holds working notes from static
+analysis of Fuji's official X RAW STUDIO app. It is a staging area rather than documentation —
+findings are consolidated there and moved into the docs above once confirmed.
+
+Read it if you want to understand Fuji's own implementation in depth: the binary architecture, how
+the app's calls become PTP on the wire, and the per-model capability table it ships.
 
 ## Current Tested Body Matrix
 
@@ -55,6 +72,10 @@ Before running write tests:
 3. Start with read-only slot dumps.
 4. Write a single slot before writing all slots.
 5. Restore your original slots afterwards.
+
+## Implementations
+
+- [FujiSync](https://github.com/ILFforever/FujiSync) — Android app built on this protocol.
 
 ## Contribution Priorities
 
