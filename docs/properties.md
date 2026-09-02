@@ -8,10 +8,9 @@ The known recipe block spans:
 0xD18E..0xD1A4
 ```
 
-That is exactly 23 properties. `0xD1A5` is **not** part of the slot block — it is the first property
-of the live / C0 block, documented in [current-shooting-state.md](current-shooting-state.md).
-Reading it succeeds and returns a live value, so including it in a read sweep is harmless; writing
-it as if it were slot data changes the camera's current shooting state instead.
+That is 23 properties. Do not extend a **write** past `0xD1A4`: `0xD1A5` belongs to the live / C0
+block ([current-shooting-state.md](current-shooting-state.md)), so writing it as if it were slot data
+changes the camera's current shooting state instead. Reading it is harmless.
 
 Known mapped properties:
 
@@ -39,14 +38,12 @@ Known mapped properties:
 
 ### Remaining codes in the block
 
-The block also carries `0xD18E` Image Size, `0xD18F` Image Quality, `0xD1A3` Lens Modulation
-Optimiser and `0xD1A4` Color Space. These are not film-simulation settings and are of low relevance
-to recipe work. Working implementations read and log them but never write them; their value encodings
+The block also carries `0xD18E`, `0xD18F`, `0xD1A3` and `0xD1A4`. These are not film-simulation
+settings. Working implementations read and log them but never write them, and their value encodings
 are unmapped.
 
-`0xD18E` carries the highest known risk in the block: it is the only property Fuji's application
-wraps in a compatibility fallback, it uses seven encodings across camera generations, and it is
-absent on some bodies. Writing it is not recommended outside deliberate bring-up work.
+Provisional identifications for all four, derived from static analysis and **not hardware-tested**,
+are in [xrfc-value-tables.md](reverse-engineering/xrfc-value-tables.md).
 
 ## Film Simulation (`0xD192`)
 
@@ -96,15 +93,25 @@ camera rejects direct Dynamic Range writes while priority is active.
 | 2 | `02 00` | Strong |
 | 32768 | `00 80` | Auto |
 
-Dynamic Range Priority overrides manual Dynamic Range. Confirmed behavior on X-H2 firmware 5.20:
+Dynamic Range Priority takes over the tone curve. While it is active the camera owns three
+properties and refuses writes to all of them. Confirmed on X-H2 firmware 5.20:
 
 - Writing `0xD191` returns `0x2001` and reads back the selected priority value.
-- Writing `0xD190` while `0xD191` is Weak/Strong/Auto returns `0x201C`.
-- Reading `0xD190` after the rejected write returns the previous DR value.
-- Reading `0xD191` after the rejected DR write shows priority remains active.
+- While `0xD191` is Weak/Strong/Auto, writes to **`0xD190` Dynamic Range, `0xD19D` Highlight Tone
+  and `0xD19E` Shadow Tone** are all rejected with `0x201C` — including values that are legal for
+  this body.
+- Setting `0xD191` to Off makes all three writable again. Verified by a controlled pair of runs:
+  with priority on Auto the three rejected; with priority Off, the same values were accepted.
+- Reading `0xD190` while priority is active returns `65535` (`0xFFFF`), a placeholder rather than a
+  real setting. With priority Off it reads the true value.
 
-Writer rule: if `0xD191 != 0`, omit `0xD190` from the write set. If priority is Off, `0xD190`
-may be written normally as `0`, `100`, `200`, or `400`.
+The rejection is `InvalidDevicePropValue`, the same response an out-of-range value produces, so a
+locked property is easy to mistake for an unsupported one. Check `0xD191` before concluding that a
+tone dial is missing.
+
+Writer rule: if `0xD191 != 0`, omit `0xD190`, `0xD19D` and `0xD19E` from the write set — or write
+`0xD191 = 0` first, then the three, then restore priority. If priority is Off, `0xD190` may be
+written normally as `0`, `100`, `200`, or `400`.
 
 ## White Balance (`0xD199`)
 
@@ -121,8 +128,18 @@ may be written normally as `0`, `100`, `200`, or `400`.
 | 32771 | `0x8003` | Fluorescent 3 |
 | 32774 | `0x8006` | Shade |
 | 32775 | `0x8007` | Color Temperature |
+| 32776 | `0x8008` | Custom 1 |
+| 32777 | `0x8009` | Custom 2 |
+| 32778 | `0x800A` | Custom 3 |
 
 When White Balance is Color Temperature (`0x8007`), write Kelvin to `0xD19C`.
+
+All fourteen modes are confirmed on X-H2 (firmware 5.20). Each was written in turn, read back
+unchanged, and the camera's original mode restored afterwards.
+
+Custom 1-3 recall a white balance the photographer has measured and stored on the camera. A body
+with an empty custom slot may reject the mode it otherwise supports, so treat a rejection there as
+inconclusive rather than as evidence the mode is missing.
 
 ## Direct Signed Dials
 
@@ -231,17 +248,3 @@ Do not write the display dial directly. For example, dial `0` should write wire 
 The exact order after Film Simulation is less critical, but writing Film Simulation first avoids
 range/dependency problems.
 
-### Colour Temperature must follow White Balance
-
-Fuji's own writer confirms this. `XSDK_SetCustomSettingParameter` emits the block in ascending code
-order with one deliberate exception — Colour Temperature `0xD19C` is pulled forward and written
-immediately after White Balance `0xD199`, ahead of the WB shifts:
-
-```text
-... 0xD198, 0xD199, 0xD19C, 0xD19A, 0xD19B, 0xD19D ...
-```
-
-Colour Temperature is only writable while White Balance is in colour-temperature mode, so it has to
-be set inside that window. Writing it before White Balance returns `InvalidDevicePropValue`
-(`0x201C`). The same applies in reverse when restoring: set the temperature back **before** reverting
-White Balance, or it becomes unwritable and the camera keeps whatever you last set.

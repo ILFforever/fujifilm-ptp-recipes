@@ -54,18 +54,24 @@ camera/firmware combinations. It records, for each setting, whether a body suppo
 `0xD190` Dynamic Range · `0xD19A`/`0xD19B` WB Shift · `0xD19F` Color · `0xD1A0` Sharpness ·
 `0xD1A4` Color Space
 
-**Present on all configurations, encoding varies by generation.** A write is accepted on any body,
-but the value may be interpreted differently.
+**Present on all configurations, supported set varies by generation.** The encoding itself is stable
+— value *N* means the same thing on every body — so a value an older body does not support is
+rejected as out of range rather than misinterpreted. Per-variant value lists are in
+[xrfc-value-tables.md](reverse-engineering/xrfc-value-tables.md).
 
-| Code | Property | Encoding variants |
-|---|---|---:|
-| `0xD192` | Film Simulation | **6** |
-| `0xD195` | Grain Effect | 2 |
-| `0xD199` | White Balance | 2 |
-| `0xD19C` | Colour Temperature | 2 |
-| `0xD19D` | Highlight Tone | 2 |
-| `0xD19E` | Shadow Tone | 2 |
-| `0xD1A1` | High ISO NR | 2 |
+| Code | Property | How it varies |
+|---|---|---|
+| `0xD192` | Film Simulation | 6 variants, strictly nested `1`–`15` … `1`–`20` |
+| `0xD19D` | Highlight Tone | Older bodies whole steps only; newer add half steps |
+| `0xD19E` | Shadow Tone | Same as Highlight Tone |
+| `0xD199` | White Balance | Newer bodies add Auto White Priority and Auto Ambience Priority |
+| `0xD19C` | Colour Temperature | Older bodies 31 fixed steps; **newer accept any Kelvin 2500–10000 in steps of 10** |
+| `0xD195` | Grain Effect | Strength `1`–`3` on every body; the variant decides whether a *size* axis exists, so `4` and `5` are unreachable on older bodies |
+| `0xD1A1` | High ISO NR | **No actual difference** — both variants hold identical values |
+
+Note that two of these do not fit the "older bodies accept fewer values" summary. Colour Temperature
+gets *less* restrictive on newer bodies by switching from a list to a continuous range, and High ISO
+NR does not vary at all despite being recorded as having two variants.
 
 **Absent on some bodies entirely.** Supported on N of 36 configurations:
 
@@ -91,10 +97,11 @@ Two entries warrant specific attention.
 `0xD193` is supported on 4 of 36 configurations — the narrowest support in the block. Most
 non-X-Trans-V bodies are expected to reject it.
 
-`0xD192` Film Simulation is present on every configuration but carries six encoding variants. A write
-therefore succeeds on any body while potentially selecting a different simulation than intended. This
-is the only property in the block where a generational mismatch produces an incorrect result rather
-than an error.
+`0xD192` Film Simulation is present on every configuration and carries six variants, but they form a
+strictly nested chain — `1`–`15` on the oldest bodies through `1`–`20` on the newest, each adding one
+simulation, with identical numbering throughout. Value `1` is Provia everywhere. A recipe from a
+newer body is therefore rejected as out of range on an older one, not applied as a different
+simulation.
 
 `0xD18E` is the sole property that is both heavily fragmented (7 encodings) and frequently absent,
 which is consistent with it being the only one Fuji shipped a compatibility shim for.
@@ -108,11 +115,8 @@ None of it has been verified against a non-X-Trans-V body.
 
 ## What is unfinished in the C0 work
 
-- **The fallback table's meaning is unknown.** Its 27 entries decompose into a 1–9 axis and a 1–3
-  axis, but nothing in Fuji's binaries names what either axis enumerates.
-- **The per-generation value tables are missing.** Fuji's capability data names which encoding
-  variant a body uses, but no binary contains the value-to-meaning table for any variant other than
-  the one X-Trans V uses. Property codes are known for every body; correct *values* are not.
+- **Which bodies actually need the fallback.** The table's axes are now resolved — row is image size
+  (L/M/S), column is aspect ratio — but no body has been observed triggering the fallback.
 - **One property is untested by choice.** Lens Modulation Optimiser is read but never written,
   because its effect is not understood.
 - **No non-X-Trans-V body has been tested at all.**
@@ -126,8 +130,9 @@ None of it has been verified against a non-X-Trans-V body.
 - **Write only what you can map.** Sticking to `0xD190`–`0xD1A2` keeps you clear of `0xD18E`, the
   one property Fuji shipped a compatibility shim for.
 - **Sequence bring-up by the table above.** On a new generation, establish the five universal
-  properties first, treat the ten sometimes-absent ones as optional, and verify `0xD192` Film
-  Simulation by reading back the applied simulation rather than the response code.
+  properties first, treat the ten sometimes-absent ones as optional, and clamp values on the
+  range-varying properties to what the body's generation accepts — the per-variant lists are in
+  [xrfc-value-tables.md](reverse-engineering/xrfc-value-tables.md).
 - **Read back after writing.** A camera can return OK without applying a value. Do not treat a
   successful response as confirmation.
 - Check [tested bodies](tested-bodies.md) before assuming your body behaves like the ones here.

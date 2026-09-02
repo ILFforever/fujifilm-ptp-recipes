@@ -31,6 +31,7 @@ Every claim carries one of three labels:
 | File | Description |
 |---|---|
 | [xrfc-capability-database.md](xrfc-capability-database.md) | Camera identification (`0xD186`) and shipped feature support table across 41 camera/firmware combinations (X-Trans III, IV, V, GFX). |
+| [xrfc-value-tables.md](xrfc-value-tables.md) | Per-generation legal-value tables for the ten generation-bound recipe properties, the decoded Image Size fallback grid, and the body-to-variant matrix. |
 | [decode_xrfc_capabilities.py](decode_xrfc_capabilities.py) | Decoder for `XRFC.DAT`. |
 | [reference/xrfc-capabilities.xml](reference/xrfc-capabilities.xml) | Decoded feature table. |
 

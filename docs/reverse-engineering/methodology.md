@@ -56,6 +56,29 @@ exported symbol.
 but finishes in a few minutes headless. Run each binary's import → analyze → dump in its own Ghidra
 project (not a shared project) to allow parallel decompilation without lock contention.
 
+## Managed code: the `.exe` needs a different tool
+
+**Check for a COR20 header before trusting a Ghidra dump's coverage.**
+`FUJIFILM_X_RAW_STUDIO.exe` is mixed-mode C++/CLI: its `IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR` is
+present with `COMIMAGE_FLAGS_ILONLY` clear, and its CLI metadata holds ~13,200 MethodDefs. Only 858
+`RUNTIME_FUNCTION` entries exist, covering about **4.5 %** of the 2.1 MB `.text` section — the rest
+is CIL bytecode.
+
+Ghidra has no CIL decompiler, so a dump of that binary looks complete while omitting almost
+everything. Re-running it does not help, and linear disassembly of `.text` desynchronises within a
+few instructions. Read the managed half with ILSpy, `ildasm` or dnSpy, or by parsing the ECMA-335
+metadata streams directly.
+
+A quick coverage check that catches this class of mistake:
+
+```python
+covered = sum(f.EndAddress - f.BeginAddress for f in pe.DIRECTORY_ENTRY_EXCEPTION)
+# compare against the size of .text; a low ratio means the dump is not the whole story
+```
+
+**Yields:** the camera-write selector bitfield, the *Copy to CAMERA* dialog logic, and the complete
+value→label maps — none of which appear in any native dump.
+
 ## Vtable resolution
 
 **Goal:** given a virtual-method call, find the concrete function it dispatches to.

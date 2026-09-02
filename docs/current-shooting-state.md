@@ -23,6 +23,29 @@ They are genuinely separate stores. On an X-H2 in a single session, slot Film Si
 with C7 selected) read `12` while live Film Simulation (`0xD001`) read `4` — the camera was shooting
 one recipe while C7 held another.
 
+### Fuji's own app writes the live state
+
+This is not a path only third parties use. X RAW STUDIO's *Copy to CAMERA* dialog has two
+checkboxes — **"Copy to CAMERA SETTING"** and **"Copy to CAMERA CUSTOM SETTING"** — and the first one
+is exactly this live write.
+
+The SDK selects between the paths with a bitfield: bits 0–14 carry the slot number `1`–`7`, and
+**bit 15 (`0x8000`) means "apply to the camera's current shooting state"**. The application builds it
+directly from the two checkboxes:
+
+```text
+selector = (custom checked ? slot : 0) | (current checked ? 0x8000 : 0)
+```
+
+So a shipping X RAW STUDIO can issue `0x8000` alone (live only), `0x0001`–`0x0007` (slot only), or
+`0x8001`–`0x8007`, which writes a slot **and** the live state in a single call. The UI disables OK
+when neither box is ticked, so `0` never reaches the SDK.
+
+Two things follow for implementers. Applying a recipe to the current shooting state is a supported,
+shipped Fuji feature rather than an undocumented side road — and there is still **no live *read*** in
+that API, which is why the client skips its read-back entirely when the selector is `0x8000`. Reading
+the live codes directly with `GetDevicePropValue` works fine and is the only way to read them.
+
 ## Property map
 
 `INT16` values are signed and must be decoded as such. `UINT16` are unsigned. Both are 2 bytes
@@ -73,6 +96,11 @@ Tone `-10` into `65526` and WB Shift `-2` into `65534`.
 |---|---|
 | Color Temperature (`0xD017`) | White Balance (`0x5005`) set to `0x8007` |
 | Mono WC (`0xD104`), Mono MG (`0xD031`) | a monochrome film simulation active |
+| Dynamic Range (`0xD007`), Highlight Tone (`0xD320`), Shadow Tone (`0xD321`) | D Range Priority (`0xD02E`) set to Off (`0`) |
+
+D Range Priority is the widest of these: while it is anything but Off the camera owns all three of
+those properties and refuses every write. Dynamic Range also reads `65535` in that state rather than
+a real value. Both confirmed on an X-H2 by running the same writes with priority Auto and then Off.
 
 Writing the property before its prerequisite is set returns `InvalidDevicePropValue` (`0x201C`),
 which is easy to mistake for a wrong property code. Distinguish the two:
@@ -172,11 +200,18 @@ The 23-property block corresponds to **`0x1058` through `0x10b8` in order, skipp
 
 Mapping that run onto the property codes reproduces the established meaning at every position —
 `lDynamicRange` at `0xD190`, `lFilmSimulation` at `0xD192`, `lColorMode` at `0xD19F`, `lColorSpace`
-at `0xD1A4`, and so on for 21 of the 23. Those 21 independent agreements fix the alignment, which
-determines the identity of the two remaining positions:
+at `0xD1A4`, and so on for 21 of the 23.
+
+The remaining two are not left to inference. A single function in `XRFC.dll` builds the 23-entry
+array that is handed to `XSDK_SetCustomSettingParameter`, reading each field from `RAWSettings` in
+order, and it can simply be read off:
 
 - **Row 1 (`0xD18E` / `0xD1A5`) is `lImageSize`.**
 - **Row 2 (`0xD18F` / `0xD018`) is `lImageQuality`.**
+
+That builder is called between the SDK's get and set calls in
+`XRFCClass::SetCustomSettingsByAttachedProfile` and `…ByRegisteredProfile`. Its full index table is
+in [xrfc-value-tables.md](reverse-engineering/xrfc-value-tables.md#15-the-block-builder--fun_1800c55f0).
 
 Two consequences follow:
 
@@ -257,23 +292,27 @@ fallback transmits one of the two components. The live fallback transmits both.
 
 **The slot read reconstructs from the row alone.** Reading `0xD18E` and getting error `0x2C` makes
 the client read `0xD1A8` instead, then rebuild a composite value by indexing the same 27-entry table
-at `[value * 9]` — the first column of that row. That is consistent with the write side only ever
-sending the row: the pair is designed to round-trip the row and assume column 1.
+at `[(value - 1) * 9]` — the first column of that row. That is consistent with the write side only
+ever sending the row: the pair is designed to round-trip the row and assume column 1.
 
-It also appears to be **off by one**. The value read from `0xD1A8` is a 1-based row (the write side
-sends `row + 1`, and the read side validates `1..3`), but it is used as the multiplier directly:
+The indexing is correct. Reading `1`, `2`, `3` from `0xD1A8` yields `22`, `24` and `26` — column 1 of
+rows 1, 2 and 3 — and the row is validated as `1..3` before use.
 
-| `0xD1A8` reads | Code indexes | Yields | Column 1 of that row is |
-|---|---|---|---|
-| `1` | `table[9]` | `24` | `22` |
-| `2` | `table[18]` | `26` | `24` |
-| `3` | `table[27]` | `0` — **past the end of the 27-entry table** | `26` |
+> This is worth stating explicitly because the arithmetic is easy to misread in a decompiler. The
+> machine code at `0x180004460` in `XGFXAPI.dll` is:
+>
+> ```asm
+> 48 8d 14 c9            lea  rdx, [rcx+rcx*8]        ; rdx = row * 9
+> 48 8d 05 93 42 04 00   lea  rax, [rip+0x44293]      ; -> table at 0x180048700
+> 8b 44 90 dc            mov  eax, [rax+rdx*4-0x24]   ; -0x24 = -9 ints
+> ```
+>
+> The `-0x24` displacement makes the effective address `table + (row - 1) * 9 * 4`. A decompiler may
+> fold that displacement into a spurious base symbol and render the expression as `table[value * 9]`,
+> which looks like an off-by-one and an out-of-bounds read on row 3. It is neither.
 
-`(value - 1) * 9` would yield `22`, `24`, `26` — the first column of rows 1, 2 and 3, which is
-clearly the intent. As written, every row resolves one row too far and row 3 reads out of bounds.
-
-**Do not copy this.** If you ever implement the slot fallback, send and reconstruct both components,
-and index the table with `(value - 1) * 9`.
+**If you implement the slot fallback**, the one thing not to copy is the dropped column: send and
+reconstruct both components rather than assuming column 1.
 
 ### When it applies
 
@@ -290,15 +329,16 @@ has yet been observed triggering it.
 If you are implementing a client:
 
 - Write row 1 normally. If the camera accepts it, you are done and the fallback is irrelevant.
-- If a camera rejects it, this is the recovery Fuji performs — but implement it from the corrected
-  description above, not by copying their code: send **both** components on the slot path, and index
-  the table with `(value - 1) * 9` on read.
+- If a camera rejects it, this is the recovery Fuji performs. Their table indexing is correct and can
+  be followed as-is (`(value - 1) * 9` on read); the one thing to improve on is sending **both**
+  components on the slot path rather than the row alone.
 - The trigger Fuji uses is SDK error `0x2C`, an internal Fuji result code rather than a PTP response.
   A third-party client cannot see that code; you will see whatever PTP error the camera returned, so
   key your own fallback on the write failing rather than on a specific value.
 
-These three codes are referenced in exactly two places in the entire SDK — the two write branches and
-the one read branch described above. Nothing else in Fuji's software touches them.
+These three codes are referenced exactly four times in the entire SDK — twice in the live write
+branch, once in the slot write branch, once in the read branch. Nothing else in Fuji's software
+touches them.
 
 ### Why it exists: older bodies use a different encoding
 
@@ -330,20 +370,24 @@ The picture that fits:
 This is consistent with row 1 being `lImageSize`, established independently above from the struct
 layout: `ImageSize` is the only field in the block whose encoding varies enough to explain a shim.
 
-Still not confirmed: no enum or string table in any binary names what either axis enumerates, and no
-older body has been tested to see the fallback actually fire.
+Both axes are now identified. A wide-string label table in `XRFC.dll` names all 27 values as
+`<size><aspect>` — `L3x2`, `M4x3`, `S16x9` and so on — which resolves the table's rows to image size
+(L/M/S) and its columns to aspect ratio (3:4, 1:1, 7:6, 5:4, 4:3, 3:2, 16:9, 65:24, 17:6). The
+derivation is in
+[xrfc-value-tables.md](reverse-engineering/xrfc-value-tables.md#62-the-fallback-table-decoded).
+
+Still not confirmed: no older body has been tested to see the fallback actually fire.
 
 ## Open questions
 
-- **What the two axes of the fallback table enumerate.** A 9-way and a 3-way axis are consistent
-  with image size (aspect ratios × L/M/S), but nothing in the binaries names them.
-- **The value tables behind the capability variants.** Fuji records which *variant* of each setting a
-  body uses — `0xD192` Film Simulation has six — but no binary contains the value-to-meaning table
-  for a variant other than the one X-Trans V uses. The property codes are known for every body; the
-  correct values are known only for X-Trans V.
 - **Which bodies actually need the fallback.** Older `Std2` bodies are the likely candidates; none
   has been tested.
-- **Other camera bodies.** Everything here is one X-H2 on firmware 5.20.
+- **Whether the values a newer body uses are accepted by an older one.** Fuji's own per-generation
+  value tables have been recovered — see
+  [xrfc-value-tables.md](reverse-engineering/xrfc-value-tables.md) — but they describe what Fuji's
+  client considers legal, not what camera firmware accepts. No non-X-Trans-V body has been tested
+  against them.
+- **Other camera bodies.** Everything hardware-verified here is one X-H2 on firmware 5.20.
 
 ## Settings this path does not carry
 
@@ -352,8 +396,14 @@ Fuji's profile format includes these, but the function never sends them to the c
 `PortraitEnhancer`, `RotationAngle`, `Rating`.
 
 `ExposureBias` and `WBShootCond` are skipped from inside the block's offset run; the rest sit outside
-it entirely. `GrainEffectSize` is not dropped so much as folded in — Fuji combines it with
-`GrainEffect` into the single composite value written to `0xD195`.
+it entirely. `GrainEffectSize` is not dropped so much as folded in — the builder combines it with
+`GrainEffect` into the single composite written to `0xD195`: Off → `1` regardless of size, then
+weak/strong × small/large → `2`, `3`, `4`, `5`.
+
+Twenty-one of the 23 fields are copied verbatim, so for those the stored value is the wire value. The
+two exceptions are that grain composite and `0xD18F` Image Quality, which is conditionally remapped
+(`2→4`, `3→5`, `6→7`) — see
+[xrfc-value-tables.md](reverse-engineering/xrfc-value-tables.md#image-quality-is-remapped-before-it-reaches-the-wire).
 
 If you are looking for a property code for one of those, it is not part of this path.
 

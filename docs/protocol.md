@@ -160,9 +160,9 @@ Response codes:
 The slot selector is the central control point. Write `0xD18C` first, then read or write the name
 and recipe properties for that selected slot.
 
-The block ends at `0xD1A4`. `0xD1A5` is the first property of the **live / C0** block, not a slot
-property — see [current-shooting-state.md](current-shooting-state.md). Fuji's own writer confirms
-the split: its slot path emits `0xD18E`–`0xD1A4` and its live path begins at `0xD1A5`.
+The block ends at `0xD1A4`. `0xD1A5` belongs to the **live / C0** block, not the slot block — see
+[current-shooting-state.md](current-shooting-state.md). Reading it is harmless; writing it as slot
+data changes the camera's current shooting state.
 
 Observed slot values:
 

@@ -32,7 +32,19 @@ internals (OpenCV, Boost, CRT).
 | `FTLPTP.dll` | 599 | ~30 | Transport fully mapped. 17 PTP opcode builders enumerated. Worker-thread transaction model traced. HRESULT to PTP error mapping resolved. WPD GUIDs resolved. `OpenSession` and `CloseSession` stubs aliased. |
 | `XGFXAPI.dll` | 2,052 | ~100 | 126 exports swept. Internal command IDs recovered for all 126. Dispatcher core, handle registry, and param-object layout traced. Value-shape constraint and 31-slot FTL binding table traced. `0xD235` and `FTLPTPIP.dll` load path traced. |
 | `XRFC.dll` | 14,496 | ~15 | `CapabilityClass::ReadCapabilityFile` decode routine traced. `XRFCClass::OpenUSB` connect sequence traced. `XSDKClass::LoadXSDK` traced. `RAWSettingsClass::OutputLog` recovered, giving the full named struct layout. `RAWSettings` to parameter-array serializer traced. |
-| `FUJIFILM_X_RAW_STUDIO.exe` | 2,047 | 0 | Full dump generated. Never opened. |
+| `FUJIFILM_X_RAW_STUDIO.exe` | 2,047 | ~10 | **Mixed-mode C++/CLI — the Ghidra dump covers only ~4.5 % of `.text`.** See the note below. UI logic, the camera-write selector, and the value→label maps were recovered by reading CLI metadata and IL instead. |
+
+### The `.exe` is not a native binary
+
+`FUJIFILM_X_RAW_STUDIO.exe` is **mixed-mode C++/CLI**. Its COR20 header is present with
+`COMIMAGE_FLAGS_ILONLY` clear, and the CLI metadata holds 13,217 MethodDefs, 2,927 TypeDefs and 408
+P/Invoke rows. Only 858 `RUNTIME_FUNCTION` entries exist, covering 96,103 bytes — about **4.5 % of
+the 2.1 MB `.text` section**. The rest is CIL bytecode.
+
+Ghidra has no CIL decompiler, so re-running it will not improve coverage, and linear disassembly of
+`.text` desynchronises immediately. Use ILSpy, `ildasm` or dnSpy for the managed half. A native
+sweep of all 858 functions found no reference to the XRFC import thunks, the controller log strings,
+or the label tables — everything of interest on that side is managed code.
 
 ## Verified findings
 
@@ -70,9 +82,19 @@ internals (OpenCV, Boost, CRT).
 - ✅ `RAWSettingsClass::OutputLog` in `XRFC.dll` recovered — names every `RAWSettings` field with its
   struct offset. The 23-property block is `0x1058`–`0x10b8` in order, skipping `lExposureBias` and
   `lWBShootCond`.
-- ✅ Row 1 identified as `lImageSize` and row 2 as `lImageQuality`, from 21 independent positional
-  agreements against already-known codes. `lFileType` is not sent to the camera.
-  [current-shooting-state.md](../current-shooting-state.md#the-block-is-derivable-from-the-struct)
+- ✅ Block builder `FUN_1800c55f0` located — the function that turns `RAWSettings` into the 23-int
+  array passed to `XSDK_SetCustomSettingParameter`. Read directly, it settles row 1 = `lImageSize`,
+  row 2 = `lImageQuality`, `0xD193` = `lBlackImageTone`, `lFileType` never sent, and shows that 21 of
+  23 fields are verbatim copies.
+  [xrfc-value-tables.md](xrfc-value-tables.md#15-the-block-builder--fun_1800c55f0)
+- ✅ Only two fields are transformed on the way out: the grain composite (`0xD195`) and a conditional
+  Image Quality remap (`0xD18F`, `2→4`/`3→5`/`6→7`).
+- ✅ The live / C0 write is a shipped X RAW STUDIO feature, not dead SDK code. Selector bit 15
+  (`0x8000`) requests it, built directly from the *Copy to CAMERA SETTING* checkbox; bits 0–14 carry
+  the slot. Both can be set in one call.
+  [current-shooting-state.md](../current-shooting-state.md#fujis-own-app-writes-the-live-state)
+- ✅ `0xD1A8`'s reconstructed aspect ratio is a placeholder that Fuji's client overwrites; there is no
+  read path for the aspect at all. [xrfc-value-tables.md](xrfc-value-tables.md)
 - ✅ `0xD193` identified as `lBlackImageTone` and `0xD194` as `lMonochromaticColor_RG`. Corrects an
   earlier claim that `BlackImageTone` was not carried.
 - ✅ Slot block bounded at `0xD18E`–`0xD1A4`; `0xD1A5` belongs to the live block. Confirmed from the
@@ -82,6 +104,10 @@ internals (OpenCV, Boost, CRT).
 - ✅ Per-property generation risk derived from the capability table — 5 universal properties, 7 with
   varying encodings, 10 absent on some bodies.
   [protocol-status.md](../protocol-status.md#which-properties-differ-by-generation)
+- ✅ Image Size fallback axes resolved: row = image size (L/M/S), column = aspect ratio, all 27 cells
+  named from a wide-string label table. [xrfc-value-tables.md](xrfc-value-tables.md)
+- ✅ Ten generation-bound properties identified; the other fourteen in the block have no
+  variant-keyed table and vary only by presence.
 - ✅ Colour Temperature `0xD19C` is emitted out of numeric order, immediately after White Balance
   `0xD199`, confirming the prerequisite ordering rule. [properties.md](../properties.md#suggested-write-order)
 
@@ -95,16 +121,17 @@ internals (OpenCV, Boost, CRT).
   `XRFC_{Clear,Get,Save,Load,Renew}RAWSettings` exports located. The on-disk profile save/load format
   is still untraced — an XML serializer writing `ConversionProfile.PropertyGroup.*` keys is present
   and is the obvious next thread for a plain-text recipe interchange format.
-- ⬜ **Per-generation value tables.** The highest-value open item. Fuji's capability data names the
-  encoding variant each body uses (`0xD192` Film Simulation has six) but no value-to-meaning table
-  for non-X-Trans-V variants has been found. Without these, correct values are known only for
-  X-Trans V even though the property codes are known for every body. Search `XRFC.dll` for the
-  variant-keyed lookup that consumes the `type="Std…"` attributes.
+- 🟡 **Per-generation value tables recovered** for all ten generation-bound properties, at 100 %
+  entry coverage, and bound to properties via their `<xmlattr>.type` parsers.
+  [xrfc-value-tables.md](xrfc-value-tables.md). Remaining: four declared variants have no table in
+  the binary (Colour Temperature `Std2`, Grain Effect `Std1`, CustomSetting, DigitalTeleConv) and the
+  `equal_range` miss path is untraced.
 - ⬜ `XGFXAPI.dll` command classes for aperture, shutter speed, dynamic range, and RAW send. Manual
   vtable tracing required.
 - ⬜ `0xD185` unused property in the tether block. Requires probing on a live body.
-- ⬜ `FUJIFILM_X_RAW_STUDIO.exe` functions. Requires string sweeps for license, update, or
-  telemetry logic.
+- 🟡 `FUJIFILM_X_RAW_STUDIO.exe`. The camera-write selector, the *Copy to CAMERA* dialog logic and
+  the complete value→label maps are recovered. License, update and telemetry logic are untouched, and
+  need a CIL tool rather than Ghidra.
 - 🟡 Live USB packet capture of X RAW STUDIO traffic. Required to confirm firmware-level rejections
   on older bodies, diagnose X-Pro3 write failures, and verify `0xD186` and `0xD187` string matching
   across bodies.
