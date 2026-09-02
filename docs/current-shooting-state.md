@@ -23,29 +23,6 @@ They are genuinely separate stores. On an X-H2 in a single session, slot Film Si
 with C7 selected) read `12` while live Film Simulation (`0xD001`) read `4` — the camera was shooting
 one recipe while C7 held another.
 
-### Fuji's own app writes the live state
-
-This is not a path only third parties use. X RAW STUDIO's *Copy to CAMERA* dialog has two
-checkboxes — **"Copy to CAMERA SETTING"** and **"Copy to CAMERA CUSTOM SETTING"** — and the first one
-is exactly this live write.
-
-The SDK selects between the paths with a bitfield: bits 0–14 carry the slot number `1`–`7`, and
-**bit 15 (`0x8000`) means "apply to the camera's current shooting state"**. The application builds it
-directly from the two checkboxes:
-
-```text
-selector = (custom checked ? slot : 0) | (current checked ? 0x8000 : 0)
-```
-
-So a shipping X RAW STUDIO can issue `0x8000` alone (live only), `0x0001`–`0x0007` (slot only), or
-`0x8001`–`0x8007`, which writes a slot **and** the live state in a single call. The UI disables OK
-when neither box is ticked, so `0` never reaches the SDK.
-
-Two things follow for implementers. Applying a recipe to the current shooting state is a supported,
-shipped Fuji feature rather than an undocumented side road — and there is still **no live *read*** in
-that API, which is why the client skips its read-back entirely when the selector is `0x8000`. Reading
-the live codes directly with `GetDevicePropValue` works fine and is the only way to read them.
-
 ## Property map
 
 `INT16` values are signed and must be decoded as such. `UINT16` are unsigned. Both are 2 bytes
@@ -87,6 +64,9 @@ colour-temperature mode; the tone dials are the dial position × 10.
 
 ## Common pitfalls
 
+**There is no bulk live read.** Fuji's SDK has no operation that reads the current shooting state as
+a block. Read each live code individually with `GetDevicePropValue` (`0x1015`).
+
 **Nine properties are signed.** Decode them as `INT16`. Reading them as unsigned turns Highlight
 Tone `-10` into `65526` and WB Shift `-2` into `65534`.
 
@@ -107,6 +87,12 @@ which is easy to mistake for a wrong property code. Distinguish the two:
 
 - `0x201C` — the property exists; the **value** is invalid.
 - `0x200A` — the property does not exist on this body.
+
+**Restore order matters.** When reverting gated properties, restore the gated property first, while
+its prerequisite is still set. For example, restore Colour Temperature (`0xD017`) while White Balance
+is still `0x8007`, then revert White Balance last. Reverting White Balance first makes the temperature
+unwritable (`0` is not a valid Kelvin value), and the camera keeps whatever you last set. The same
+applies to Mono WC/MG under a monochrome film simulation.
 
 **Values are not contiguous.** `current + 1` is usually invalid: Grain Effect is an enum (`1` = Off,
 `2`–`5` = weak/strong × small/large), High ISO NR is a non-linear lookup, and the tone dials step by
@@ -138,91 +124,6 @@ Not yet tested on any other body. Live codes are expected to be stable across mo
 the slot codes are, but that is an assumption until someone checks. Results from other bodies are
 welcome — see [testing-checklist.md](testing-checklist.md).
 
-### Restore order matters for gated properties
-
-Colour Temperature (`0xD017`) reads `0` when White Balance is not in colour-temperature mode, and
-`0` is not a writable Kelvin value.
-
-So if you change it and want to put things back, **restore the temperature first, while White
-Balance is still `0x8007`, and revert White Balance last.** Reverting White Balance first makes the
-temperature unwritable, and the camera keeps whatever you last set.
-
-The same rule applies to Mono WC/MG under a monochrome film simulation: restore the gated property
-before the property gating it.
-
-## Why these pairings are trustworthy
-
-The mapping was recovered from FUJIFILM X RAW STUDIO, Fuji's own desktop app. Its
-`XSDK_SetCustomSettingParameter` function writes the stored block and the live block from **the same
-source struct, at the same memory offsets, in the same order** — offset `0x08` feeds slot `0xD190`
-and live `0xD007`, offset `0x38` feeds slot `0xD19C` and live `0xD017`, and so on for all 23. That
-offset-for-offset correspondence is what pairs each code with its counterpart.
-
-Four pairs land on codes documented independently, from unrelated work, which is a useful check that
-the table is not self-confirming:
-
-- `0xD007` was already known as the live Dynamic Range property.
-- `0xD017` was already known as the live white-balance colour temperature.
-- `0x5005` is `WhiteBalance` in the PTP standard itself (ISO 15740).
-- `0x5015` is `Sharpness` in the PTP standard.
-
-None of those were chosen to make the table work — they fall out of it. The signed/unsigned type
-also agrees on all 23 rows, and every value has since been confirmed on hardware.
-
-Setting names come from Fuji's own XML serializer, which writes the same struct out using names like
-`ConversionProfile.PropertyGroup.DynamicRange`.
-
-### The block is derivable from the struct
-
-A debug routine in Fuji's `XRFC.dll`, `RAWSettingsClass::OutputLog`, prints every `RAWSettings` field
-by name with its offset. The recipe fields occupy one contiguous run:
-
-```text
-0x1050 lShootCondition          0x1088 lWBShootCond
-0x1054 lFileType                0x108c lWhiteBalance
-0x1058 lImageSize               0x1090 lWBShift_R
-0x105c lImageQuality            0x1094 lWBShift_B
-0x1060 lExposureBias            0x1098 lWBColorTemp
-0x1064 lDynamicRange            0x109c lHighLightTone
-0x1068 lWideDynamicRange        0x10a0 lShadowTone
-0x106c lFilmSimulation          0x10a4 lColorMode
-0x1070 lBlackImageTone          0x10a8 lSharpness
-0x1074 lMonochromaticColor_RG   0x10ac lNoiseReduction
-0x1078 lGrainEffect             0x10b0 lClarity
-0x107c lColorChromeEffect       0x10b4 lLMOMode
-0x1080 lColorChromeBlue         0x10b8 lColorSpace
-0x1084 lSmoothSkinEffect
-```
-
-The 23-property block corresponds to **`0x1058` through `0x10b8` in order, skipping `0x1060`
-(`lExposureBias`) and `0x1088` (`lWBShootCond`)**. The field count agrees:
-`(0x10b8 − 0x1058) / 4 + 1 = 25`, less the two skipped fields, gives 23.
-
-Mapping that run onto the property codes reproduces the established meaning at every position —
-`lDynamicRange` at `0xD190`, `lFilmSimulation` at `0xD192`, `lColorMode` at `0xD19F`, `lColorSpace`
-at `0xD1A4`, and so on for 21 of the 23.
-
-The remaining two are not left to inference. A single function in `XRFC.dll` builds the 23-entry
-array that is handed to `XSDK_SetCustomSettingParameter`, reading each field from `RAWSettings` in
-order, and it can simply be read off:
-
-- **Row 1 (`0xD18E` / `0xD1A5`) is `lImageSize`.**
-- **Row 2 (`0xD18F` / `0xD018`) is `lImageQuality`.**
-
-That builder is called between the SDK's get and set calls in
-`XRFCClass::SetCustomSettingsByAttachedProfile` and `…ByRegisteredProfile`. Its full index table is
-in [xrfc-value-tables.md](reverse-engineering/xrfc-value-tables.md#15-the-block-builder--fun_1800c55f0).
-
-Two consequences follow:
-
-- `lFileType` (`0x1054`) sits one field before the block starts, so it is **not sent to the camera**.
-  X RAW STUDIO selects the output file type on the PC side.
-- The two monochrome codes are Fuji's `lBlackImageTone` (`0xD193`) and `lMonochromaticColor_RG`
-  (`0xD194`) — the warm/cool and magenta/green axes respectively.
-
-Corroborating the row 1 result: `lImageSize` defaults to `7` in Fuji's code, and the X-H2 write test
-read row 1 as `7` before moving it to `8`. `lImageSize` is also the field with seven capability
-variants, which is what the fallback below exists to paper over.
 
 ## The fallback path
 

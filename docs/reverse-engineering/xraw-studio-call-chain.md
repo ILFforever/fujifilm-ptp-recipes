@@ -293,6 +293,53 @@ Each `value` length matches `dataType`.
 16. XRFC.dll   look "X-H2_0200" up in XRFC.DAT -> X-H2Config2 -> apply model feature flags
 ```
 
+## App-level call: camera-write selector
+
+**CONFIRMED.** Recovered from `FUJIFILM_X_RAW_STUDIO.exe` (mixed-mode C++/CLI; CLI metadata and IL,
+not the Ghidra native dump — see the note in
+[xraw-studio-re-tracker.md](xraw-studio-re-tracker.md#binary-coverage)).
+
+X RAW STUDIO's *Copy to CAMERA* dialog has two checkboxes:
+
+- **"Copy to CAMERA SETTING"** — write to the camera's current shooting state (live / C0).
+- **"Copy to CAMERA CUSTOM SETTING"** — write to a stored slot (C1–C7).
+
+The app builds a single 16-bit selector from these two checkboxes and passes it to
+`XSDK_SetCustomSettingParameter`:
+
+```text
+selector = (custom checked ? slot : 0) | (current checked ? 0x8000 : 0)
+```
+
+| Bits | Meaning |
+|---|---|
+| 0–14 | Slot number `1`–`7`, or `0` if not writing a slot |
+| 15 (`0x8000`) | Apply to the camera's current shooting state |
+
+So the possible values are:
+
+| Selector | Effect |
+|---|---|
+| `0x0001`–`0x0007` | Slot only |
+| `0x8000` | Live only |
+| `0x8001`–`0x8007` | Both slot **and** live in one call |
+
+The UI disables OK when neither checkbox is ticked, so `0` never reaches the SDK.
+
+Two things follow:
+
+1. Writing the live state is a **shipped feature** of Fuji's own app, not an undocumented side road.
+2. There is **no live read** in this API. The reader (`XSDK_GetCustomSettingParameter`) is
+   unconditional and touches only the stored block — `0xD18C`, `0xD18D`, `0xD18E`–`0xD1A4`, plus
+   `0xD1A8`. It contains no live property codes and no branching. Reading the live codes directly
+   with `GetDevicePropValue` (`0x1015`) works fine.
+
+This is what the SDK dispatches into: when bit 15 is set, `SetCustomSettingParameter` writes the
+23-property block to the live codes (see
+[current-shooting-state.md](../current-shooting-state.md#property-map)); when bits 0–14 carry a
+slot, it writes the same block to the slot codes (`0xD18E`–`0xD1A4`) after selecting the slot via
+`0xD18C`.
+
 ## Client implementation notes
 
 - **Send `OpenSession` (`0x1002`).** WPD handles this automatically for Fuji's app. Third-party clients must send it explicitly.
@@ -314,11 +361,8 @@ Each `value` length matches `dataType`.
 
 ## Unresolved
 
-- Which `FileType` / `ImageSize` / `ImageQuality` fields occupy the first two slots of the recipe block.
-- What the 27-entry decompose table enumerates.
 - Whether `0xD186` and `0xD187` differ. They are identical on a tested X-H2.
 - What "IOP" stands for in `0xD184`.
 - The RAW conversion round-trip (`SendRAWFromPC` → `SetRAWSettings` → `ConvertRAWImage` → `ReadImage`). The wire sequence and completion model remain untraced.
-- `FUJIFILM_X_RAW_STUDIO.exe` itself.
 
 See [current-shooting-state.md](../current-shooting-state.md#open-questions) for open questions on the recipe block.
