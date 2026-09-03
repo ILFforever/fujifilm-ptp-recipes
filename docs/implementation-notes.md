@@ -122,6 +122,25 @@ D Range Priority Weak -> write 0xD191 = 1 and omit 0xD190
 On X-H2 firmware 5.20, the camera returned `0x201C` for the `0xD190` write while `0xD191` was
 active. The DR readback stayed unchanged and priority remained active.
 
+### Trusting a successful WB shift write on a pre-X-Pro3 body
+
+Wrong:
+
+```text
+write 0xD19A = 2 -> OK -> read back 2 -> shift saved with this preset
+```
+
+Correct:
+
+```text
+write 0xD19A = 2 -> OK -> read back 2 -> shift saved for this white-balance TYPE,
+                                        and every other preset using it just changed
+```
+
+On X-T3 and older the shift is not per preset. Read-back confirms nothing here, because the value
+genuinely is active for that mode. See
+[properties.md](properties.md#wb-shift-is-not-stored-per-preset-on-x-t3-and-older).
+
 ### Writing color-only props for monochrome simulations
 
 Suppress color-only writes when the film simulation is monochrome-like.

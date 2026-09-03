@@ -205,6 +205,48 @@ The `_0100` suffix denotes a firmware generation, not the display version string
 
 Full property-by-property detail is in [reference/xrfc-capabilities.xml](reference/xrfc-capabilities.xml).
 
+### `CustomSetting` tracks per-preset WB shift
+
+**INFERRED.** The `CustomSetting` element is absent on every configuration below the X-Pro3 —
+X-T2, X-Pro2, X100F, X-T20, X-E3, X-H1, X-T3, X-T30, GFX50S/R, GFX100 firmware 1–2 — and true from
+`XPro3Config1` onward.
+
+That boundary is exactly where reported camera behaviour changes: the X-Pro3 was the first body to
+save a white-balance shift with each C1–C7 preset, and on everything before it the shift is stored
+once per white-balance *type* and shared across presets
+([properties.md](../properties.md#wb-shift-is-not-stored-per-preset-on-x-t3-and-older)).
+
+The correlation is exact across all 36 configurations, which is strong for a flag whose name is
+otherwise uninformative. It has not been traced through `XRFC.dll`, so the binding is inference from
+the boundary rather than from code — but if it holds, `CustomSetting` is the flag a client should
+check before writing `0xD19A`/`0xD19B` per preset.
+
+Note the variant dimension: `CustomSetting` carries a `Std2` type that stores the scalar `2` rather
+than a value list (§13 of [xrfc-value-tables.md](xrfc-value-tables.md)), so it may encode more than
+a boolean.
+
+### A flag names a feature, not a property code
+
+**CONFIRMED on hardware.** The two are not one to one, and reading a flag as a statement about a
+property code produces wrong conclusions.
+
+`BlackImageTone` is the clearest case. The flag is true on exactly four configurations —
+`X-T3Config1`, `X-T30Config1`, `Gfx100Config1`, `Gfx100Config2` — and its field name
+`lBlackImageTone` attaches to `0xD193`. That reads like "`0xD193` is unsupported on an X-H2", which
+is false: on an X-H2 the code carries the Warm/Cool axis of monochrome toning and works normally,
+verified by setting the camera by hand and reading it back
+([properties.md](../properties.md#monochrome-toning-0xd193--0xd194)).
+
+The explanation is feature succession. BlackImageTone was the single-axis black-and-white toning of
+the 2018–2019 bodies; the two-axis Warm/Cool + Magenta/Green control replaced it, and `0xD193` was
+carried forward as one of its axes while keeping the original field name. The flag is a correct
+statement about the *feature*, which those later bodies genuinely do not have.
+
+So the 4/36 support figure is real and means what it says — it just does not mean what a client
+reading it as a property-support bitmap would assume. **A false flag is not evidence that a code is
+unsupported.** Check `GetDeviceInfo`'s property list for that, and treat the capability data as
+describing features and value ranges rather than wire-level availability.
+
 ### Notable irregularities
 
 * **X-H1 capability tracks processor, not sensor.** Despite having an X-Trans III sensor, `X-H1Config1` matches the X-T3 baseline (`ImageSize`/`ImageQuality` true, `WideDynamicRange` true, `FilmSimulation Std2`).

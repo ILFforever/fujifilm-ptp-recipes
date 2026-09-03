@@ -1,8 +1,6 @@
 # Current shooting state (C0): applying a recipe without a slot
 
-**TL;DR** — The camera's current shooting state, what you get in P/A/S/M, is often called "C0". It
-is **not** a slot. There is no slot number `0`. The live state has its own set of property codes,
-one per setting, running in parallel to the C1–C7 block.
+**TL;DR** — The camera's current shooting state, what you get in P/A/S/M, is often called "C0".
 
 Applying a recipe live is the same values you would write to a slot, sent to **different property
 codes**, with **no slot selector**.

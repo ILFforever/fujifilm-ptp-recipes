@@ -19,8 +19,8 @@ Known mapped properties:
 | `0xD190` | 53648 | Dynamic Range | `uint16LE` | 100 | DR Auto/100/200/400 |
 | `0xD191` | 53649 | Dynamic Range Priority | `uint16LE` | 0 | Off/Weak/Strong/Auto |
 | `0xD192` | 53650 | Film Simulation | `uint16LE` | 1 (Provia) | Film simulation enum |
-| `0xD193` | 53651 | Mono WC | `int16LE` | 0 | Warm/Cool monochrome color, dial×10 |
-| `0xD194` | 53652 | Mono MG | `int16LE` | 0 | Magenta/Green monochrome color, dial×10 |
+| `0xD193` | 53651 | Mono WC | `int16LE` | 0 | Warm/Cool monochrome color, dial×10, range −180..180 |
+| `0xD194` | 53652 | Mono MG | `int16LE` | 0 | Magenta/Green monochrome color, dial×10, range −180..180 |
 | `0xD195` | 53653 | Grain Effect | `uint16LE` | 1 | Combined grain strength and size |
 | `0xD196` | 53654 | Color Chrome | `uint16LE` | 1 (Off) | Off/Weak/Strong |
 | `0xD197` | 53655 | Color Chrome FX Blue | `uint16LE` | 1 (Off) | Off/Weak/Strong |
@@ -160,6 +160,40 @@ Encoding: `int16LE`.
 Validate or clamp to `-9..+9` before writing. Do not scale these — they are the only two signed
 dial properties that use 1:1 (not ×10) encoding.
 
+### WB shift is not stored per preset on X-T3 and older
+
+**NOT VERIFIED BY THIS PROJECT.** Reported behaviour, corroborated by Fuji's own capability data.
+Nobody has yet measured it over PTP. It is documented here because the failure mode is silent and
+destructive, so an implementer should know before writing these properties.
+
+From the X-Pro3 onward, a white-balance shift is saved with each C1–C7 preset. On **X-T3, X-T30,
+X-H1 and X-Trans III bodies it is not**: the camera stores one shift *per white-balance type*,
+globally. Set Auto WB with R+2/B−4 in C1 and every other preset using Auto WB inherits that shift.
+No firmware update ever changed this for the X-T3 or X-T30.
+
+Why this matters more than an ordinary unsupported property:
+
+- The write is expected to **succeed**. It returns `0x2001`; the value lands. It simply lands on the
+  white-balance type rather than on the preset.
+- **Read-back cannot detect it.** Select the slot, read `0xD19A`, and the value you wrote comes
+  back — because the shift genuinely is active for that WB type. The usual "write then read back to
+  confirm" check passes while other presets have been quietly changed.
+
+The `CustomSetting` element in `XRFC.DAT` splits on exactly this boundary — absent on every
+configuration below the X-Pro3, true from the X-Pro3 onward. That is independent corroboration from
+Fuji's own data, though what the flag *means* is inferred from the correlation rather than traced
+through the binary. See
+[xrfc-capability-database.md](reverse-engineering/xrfc-capability-database.md#customsetting-tracks-per-preset-wb-shift).
+
+**Writer guidance.** On a body below the X-Pro3, either omit `0xD19A`/`0xD19B`, or warn that writing
+them changes every preset sharing that white-balance mode. The workaround photographers use is to
+give each preset a different white-balance type, which makes the per-type storage behave like
+per-preset storage.
+
+Sources: [Fuji X Weekly — My White Balance Shift Solution](https://fujixweekly.com/2019/11/06/my-white-balance-shift-solution/),
+[Fujifilm White Balance Shift: What It Is + How To Use It](https://fujixweekly.com/2020/08/19/fujifilm-white-balance-shift-what-it-is-how-to-use-it/),
+[FujiX-Forum thread](https://www.fujix-forum.com/threads/white-balance-shift-for-custom-settings-x-t3.153075/).
+
 ## Scaled Signed Dials
 
 These properties use `dial * 10`:
@@ -186,6 +220,45 @@ Examples:
 
 The signed default/unset sentinel `-32768` may appear. Treat it as default/unknown rather than a
 real dial value.
+
+## Monochrome Toning (`0xD193` / `0xD194`)
+
+Confirmed on an X-H2 (firmware 5.20) by setting the camera by hand and reading back, then by a write
+sweep.
+
+| | |
+|---|---|
+| `0xD193` | Warm / Cool |
+| `0xD194` | Magenta / Green |
+| Encoding | `int16LE`, dial × 10 |
+| Dial range | −18 … +18, so **−180 … +180** on the wire |
+| Legal values | **multiples of 10 only** |
+| Storage | per slot |
+
+Setting the camera to warm/cool `+5` and magenta/green `−3` reads back as `0xD193 = 50` and
+`0xD194 = -30`, which fixes both the axis assignment and the scale.
+
+**The camera accepts only exact dial positions.** A write sweep on both codes gave identical
+results — `0`, `10`, `20`, `50`, `90`, `100` and `-90` accepted; `1`, `2`, `5`, `9` and `-9` all
+rejected with `InvalidDevicePropValue` (`0x201C`). Round any dial to a whole number before scaling.
+
+Both are refused under a colour film simulation, the mirror of the colour-only rule above. Set the
+film simulation to a monochrome one first, or omit them.
+
+### The `BlackImageTone` name is a feature, not an axis
+
+`0xD193`'s field name in Fuji's own structures is `lBlackImageTone`, and the capability database
+marks a `BlackImageTone` flag supported on only four configurations — X-T3, X-T30 and GFX100
+firmware 1–2. That is not a statement about the property code.
+
+BlackImageTone was the **single-axis** black-and-white toning those 2018–2019 bodies had. The
+two-axis Warm/Cool + Magenta/Green control succeeded it, and `0xD193` was carried forward to be the
+warm/cool axis while keeping its original field name. So on an X-H2 the flag is correctly false
+while the code works normally.
+
+The general trap, worth stating because it will catch other properties: **capability flags name
+features, the block names property codes, and a code outlives the feature it was introduced for.**
+A false flag is not evidence that a code is unsupported.
 
 ## Off / Weak / Strong Properties
 
