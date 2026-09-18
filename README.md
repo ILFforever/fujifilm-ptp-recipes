@@ -40,10 +40,10 @@ Protocol documentation
 | [Testing checklist](docs/testing-checklist.md) | Step-by-step process for testing a new body or firmware. |
 | [Python reference snippets](examples/python/ptp_recipe_reference.py) | Constants, encoders, and write/read pseudocode. |
 
-> **Everything in this repo that is known to work is confirmed on X-Trans V only**, and should be
-> expected to fail on other generations. That applies to the C1-C7 slot protocol as much as to the
-> current shooting state (C0): the one non-X-Trans-V body tested so far, an X-Pro3 (X-Trans IV),
-> fails at C1-C7 outright, and no X-Trans III body has been tested at all. C0 is *additionally*
+> **Almost everything in this repo that is known to work is confirmed on X-Trans V only**, and
+> should be expected to fail on other generations. That applies to the C1-C7 slot protocol as much
+> as to the current shooting state (C0). Two X-Trans IV bodies have been tested at C1-C7: an X-T30 II
+> works, and an X-Pro3 fails outright. No X-Trans III body has been tested at all. C0 is *additionally*
 > unfinished reverse engineering rather than a settled protocol. See
 > [protocol status](docs/protocol-status.md) for exactly what is confirmed, what is not, and why.
 
@@ -62,6 +62,7 @@ the app's calls become PTP on the wire, and the per-model capability table it sh
 |---|---:|---|---|---|---|
 | X-H2 | 5.20 | OK | OK | OK | 0 ms inter-property delay worked in app testing. DR Priority `0xD191` confirmed; active priority rejects DR `0xD190` writes with `0x201C`. Preset names appear capped at 25 characters. |
 | X-T5 | 4.20 | OK | OK | OK | Confirmed working in app testing. |
+| X-T30 II | 2.04 | OK | OK | OK | X-Trans IV. See [tested bodies](docs/tested-bodies.md#x-t30-ii-report). |
 | X-Pro3 | 2.00 | Fails so far | Fails so far | Fails so far | Does not work with the current protocol path so far. Needs more diagnosis. |
 
 ## Safety

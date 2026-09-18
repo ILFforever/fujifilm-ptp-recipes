@@ -81,6 +81,10 @@ When writing a monochrome-like simulation, skip color-only settings.
 | 200 | DR200% |
 | 400 | DR400% |
 
+On an X-T30 II (firmware 2.04), DR Auto reads as 65535 even with `0xD191` at 0, and writing 65535
+is accepted and reads back unchanged. Writing 0 there is untested. See
+[tested bodies](tested-bodies.md#x-t30-ii-report).
+
 When Dynamic Range Priority (`0xD191`) is Weak, Strong, or Auto, do not write `0xD190`. The
 camera rejects direct Dynamic Range writes while priority is active.
 
@@ -184,6 +188,10 @@ configuration below the X-Pro3, true from the X-Pro3 onward. That is independent
 Fuji's own data, though what the flag *means* is inferred from the correlation rather than traced
 through the binary. See
 [xrfc-capability-database.md](reverse-engineering/xrfc-capability-database.md#customsetting-tracks-per-preset-wb-shift).
+
+The X-T30 II is not affected, at least as PTP reports it. On firmware 2.04, two slots sharing a
+white balance mode read back different shifts in a single pass. See
+[tested bodies](tested-bodies.md#x-t30-ii-report).
 
 **Writer guidance.** On a body below the X-Pro3, either omit `0xD19A`/`0xD19B`, or warn that writing
 them changes every preset sharing that white-balance mode. The workaround photographers use is to
