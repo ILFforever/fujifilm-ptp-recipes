@@ -1,9 +1,8 @@
 # Protocol status: what is finished and what is not
 
-**TL;DR** — **Almost everything in this repo that is known to work has only been confirmed on
-X-Trans V.** Two X-Trans IV bodies have been tested at C1-C7: an X-T30 II works and an X-Pro3 fails.
-Treat every other generation as unproven, for C1–C7 as well as for the newer
-current-shooting-state (C0) work.
+**TL;DR** — **Everything in this repo that is known to work, works on X-Trans V.** The one
+non-X-Trans-V body tested so far fails outright. Treat every other generation as unproven, for
+C1–C7 as well as for the newer current-shooting-state (C0) work.
 
 This page records the maturity of each area explicitly, so it does not have to be inferred from the
 tone of the other documents. Read it before building on anything here.
@@ -12,18 +11,17 @@ tone of the other documents. Read it before building on anything here.
 
 | Area | Status | Confirmed on |
 |---|---|---|
-| [Connection and PTP transport](protocol.md) | Working | X-H2, X-T5, X-T30 II |
-| [C1–C7 slot read/write](properties.md) | Working **on X-Trans V**, and on one X-Trans IV body | X-H2, X-T5, X-T30 II. **X-Pro3 (X-Trans IV) fails** |
-| [Preset names](name-rules.md) | Working **on X-Trans V**, and on one X-Trans IV body | X-H2, X-T5, X-T30 II |
+| [Connection and PTP transport](protocol.md) | Working | X-H2, X-T5 |
+| [C1–C7 slot read/write](properties.md) | Working **on X-Trans V** | X-H2, X-T5. **X-Pro3 (X-Trans IV) fails** |
+| [Preset names](name-rules.md) | Working **on X-Trans V** | X-H2, X-T5 |
 | [EXIF MakerNote mapping](exif-makernote.md) | Usable | Independent of camera generation |
 | [Current shooting state (C0)](current-shooting-state.md) | **Work in progress** | X-H2 only (firmware 5.20) |
 
 ## Cross-generation applicability
 
-Two X-Trans V bodies are confirmed working: X-H2 and X-T5. Two X-Trans IV bodies have been
-reported. An X-T30 II (firmware 2.04) passes C1-C7 reads, property writes and name writes. An X-Pro3
-fails at C1-C7: reads, property writes and name writes all fail. No X-Trans III body has been
-tested.
+All bodies confirmed working are X-Trans V: X-H2 and X-T5. The one non-X-Trans-V body reported, an
+X-Pro3 (X-Trans IV), fails at C1–C7 — reads, property writes and name writes all fail. No X-Trans III
+body has been tested.
 
 Three observations indicate that behaviour differs by generation, independent of test coverage:
 
@@ -128,9 +126,7 @@ None of it has been verified against a non-X-Trans-V body.
 - **Assume X-Trans V.** If you are on anything else, expect to be doing original testing rather than
   following documentation. That is true for C1–C7, not only for C0.
 - **Detect, do not assume.** `GetDeviceInfo` (`0x1001`) returns the camera's supported-property
-  list. Check the codes you intend to use appear in it before writing anything. One exception is
-  known: an X-T30 II lists no properties in this USB mode, yet reads and writes the recipe codes
-  normally. There, a missing code does not mean the property is missing.
+  list. Check the codes you intend to use appear in it before writing anything.
 - **Write only what you can map.** Sticking to `0xD190`–`0xD1A2` keeps you clear of `0xD18E`, the
   one property Fuji shipped a compatibility shim for.
 - **Sequence bring-up by the table above.** On a new generation, establish the five universal
